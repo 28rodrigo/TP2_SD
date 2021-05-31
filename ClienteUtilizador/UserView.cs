@@ -10,12 +10,11 @@ using System.Windows.Forms;
 
 namespace ClienteUtilizador
 {
-    public partial class Form1 : Form
+    public partial class UserView : Form
     {
-        public Form1()
+        public UserView()
         {
             InitializeComponent();
         }
-
     }
 }
