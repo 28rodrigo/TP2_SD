@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ClienteGestor
+namespace ClienteAdministrador
 {
-    public partial class Form1 : Form
+    public partial class AdminView : Form
     {
-        public Form1()
+        public AdminView()
         {
             InitializeComponent();
         }
