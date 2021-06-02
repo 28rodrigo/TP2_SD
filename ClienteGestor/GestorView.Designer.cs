@@ -111,6 +111,7 @@ namespace ClienteGestor
             this.textBoxEstrela2.Size = new System.Drawing.Size(40, 40);
             this.textBoxEstrela2.TabIndex = 38;
             this.textBoxEstrela2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxEstrela2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // label13
             // 
@@ -144,6 +145,7 @@ namespace ClienteGestor
             this.textBoxEstrela1.Size = new System.Drawing.Size(40, 40);
             this.textBoxEstrela1.TabIndex = 36;
             this.textBoxEstrela1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxEstrela1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // textBoxNum5
             // 
@@ -162,6 +164,7 @@ namespace ClienteGestor
             this.textBoxNum5.Size = new System.Drawing.Size(40, 40);
             this.textBoxNum5.TabIndex = 35;
             this.textBoxNum5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNum5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // label8
             // 
@@ -236,6 +239,7 @@ namespace ClienteGestor
             this.textBoxNum4.Size = new System.Drawing.Size(40, 40);
             this.textBoxNum4.TabIndex = 30;
             this.textBoxNum4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNum4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // textBoxNum3
             // 
@@ -254,6 +258,7 @@ namespace ClienteGestor
             this.textBoxNum3.Size = new System.Drawing.Size(40, 40);
             this.textBoxNum3.TabIndex = 29;
             this.textBoxNum3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNum3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // textBoxNum2
             // 
@@ -272,6 +277,7 @@ namespace ClienteGestor
             this.textBoxNum2.Size = new System.Drawing.Size(40, 40);
             this.textBoxNum2.TabIndex = 28;
             this.textBoxNum2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNum2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // label4
             // 
@@ -305,6 +311,7 @@ namespace ClienteGestor
             this.textBoxNum1.Size = new System.Drawing.Size(40, 40);
             this.textBoxNum1.TabIndex = 26;
             this.textBoxNum1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNum1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // listViewRAnteriores
             // 

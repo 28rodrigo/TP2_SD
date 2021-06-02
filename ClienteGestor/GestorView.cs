@@ -16,7 +16,7 @@ namespace ClienteGestor
             InitializeComponent();
         }
 
-        private void buttonConfirmarRegisto_Click(object sender, EventArgs e)
+        private async void buttonConfirmarRegisto_Click(object sender, EventArgs e)
         {
             string[] numeros = new string[5];
             string[] estrelas = new string[2];
@@ -62,6 +62,14 @@ namespace ClienteGestor
                 else { MessageBox.Show("Números/Estrelas Por Preencher!", "Erro!", MessageBoxButtons.OK); return false; }
             }
             else { MessageBox.Show("Números/Estrelas Por Preencher!", "Erro!", MessageBoxButtons.OK); return false; }
+        }
+
+        private void textBoxNif_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

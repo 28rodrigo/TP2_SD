@@ -66,7 +66,7 @@ namespace ClienteUtilizador
             this.buttonConfirmar.TabIndex = 0;
             this.buttonConfirmar.Text = "Apostar";
             this.buttonConfirmar.UseVisualStyleBackColor = false;
-            this.buttonConfirmar.Click += new System.EventHandler(this.buttonConfirmar_ClickAsync);
+            this.buttonConfirmar.Click += new System.EventHandler(this.buttonConfirmar_Click);
             // 
             // label1
             // 
@@ -100,6 +100,7 @@ namespace ClienteUtilizador
             this.textBoxNif.Size = new System.Drawing.Size(415, 40);
             this.textBoxNif.TabIndex = 2;
             this.textBoxNif.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNif.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // label2
             // 
@@ -145,7 +146,7 @@ namespace ClienteUtilizador
             this.buttonConsultar.TabIndex = 5;
             this.buttonConsultar.Text = "Consultar";
             this.buttonConsultar.UseVisualStyleBackColor = false;
-            this.buttonConsultar.Click += new System.EventHandler(this.buttonConsultar_ClickAsync);
+            this.buttonConsultar.Click += new System.EventHandler(this.buttonConsultar_Click);
             // 
             // textBoxNum1
             // 
@@ -164,6 +165,7 @@ namespace ClienteUtilizador
             this.textBoxNum1.Size = new System.Drawing.Size(40, 40);
             this.textBoxNum1.TabIndex = 7;
             this.textBoxNum1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNum1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // label4
             // 
@@ -190,13 +192,14 @@ namespace ClienteUtilizador
             this.textBoxNum2.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textBoxNum2.Font = new System.Drawing.Font("Lucida Sans Unicode", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxNum2.HideSelection = false;
-            this.textBoxNum2.Location = new System.Drawing.Point(180, 282);
+            this.textBoxNum2.Location = new System.Drawing.Point(184, 282);
             this.textBoxNum2.Margin = new System.Windows.Forms.Padding(6);
             this.textBoxNum2.MaxLength = 2;
             this.textBoxNum2.Name = "textBoxNum2";
             this.textBoxNum2.Size = new System.Drawing.Size(40, 40);
             this.textBoxNum2.TabIndex = 9;
             this.textBoxNum2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNum2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // textBoxNum3
             // 
@@ -215,6 +218,7 @@ namespace ClienteUtilizador
             this.textBoxNum3.Size = new System.Drawing.Size(40, 40);
             this.textBoxNum3.TabIndex = 10;
             this.textBoxNum3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNum3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // textBoxNum4
             // 
@@ -233,6 +237,7 @@ namespace ClienteUtilizador
             this.textBoxNum4.Size = new System.Drawing.Size(40, 40);
             this.textBoxNum4.TabIndex = 11;
             this.textBoxNum4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNum4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // label6
             // 
@@ -300,13 +305,14 @@ namespace ClienteUtilizador
             this.textBoxNum5.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textBoxNum5.Font = new System.Drawing.Font("Lucida Sans Unicode", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxNum5.HideSelection = false;
-            this.textBoxNum5.Location = new System.Drawing.Point(440, 282);
+            this.textBoxNum5.Location = new System.Drawing.Point(438, 282);
             this.textBoxNum5.Margin = new System.Windows.Forms.Padding(6);
             this.textBoxNum5.MaxLength = 2;
             this.textBoxNum5.Name = "textBoxNum5";
             this.textBoxNum5.Size = new System.Drawing.Size(40, 40);
             this.textBoxNum5.TabIndex = 17;
             this.textBoxNum5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNum5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // listViewRAnteriores
             // 
@@ -320,6 +326,7 @@ namespace ClienteUtilizador
             this.listViewRAnteriores.Size = new System.Drawing.Size(447, 461);
             this.listViewRAnteriores.TabIndex = 6;
             this.listViewRAnteriores.UseCompatibleStateImageBehavior = false;
+            this.listViewRAnteriores.View = System.Windows.Forms.View.List;
             // 
             // label12
             // 
@@ -352,6 +359,7 @@ namespace ClienteUtilizador
             this.textBoxEstrela2.Size = new System.Drawing.Size(40, 40);
             this.textBoxEstrela2.TabIndex = 20;
             this.textBoxEstrela2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxEstrela2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // label13
             // 
@@ -385,6 +393,7 @@ namespace ClienteUtilizador
             this.textBoxEstrela1.Size = new System.Drawing.Size(40, 40);
             this.textBoxEstrela1.TabIndex = 18;
             this.textBoxEstrela1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxEstrela1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
             // 
             // UserView
             // 

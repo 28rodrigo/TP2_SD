@@ -11,7 +11,7 @@ service ClienteUtilizadorP {
 	rpc HistoricoApostas (PedidoHistorico) returns (ResultadoHistorico);
 }
 message Aposta {
-	string NumeroApostador = 1; //NIF
+	int32 NumeroApostador = 1; //NIF
 	repeated int32 numeros = 2;
 	repeated int32 estrelas = 3;
 	google.protobuf.Timestamp DataAposta = 4; 
@@ -20,7 +20,7 @@ message EstadoAposta {
 	bool Estado = 1;
 }
 message PedidoHistorico {
-	string NumeroApostador = 1;
+	int32 NumeroApostador = 1;
 }
 message ResultadoHistorico {
 	bool Estado = 1;
