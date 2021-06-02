@@ -6,7 +6,7 @@ import "google/protobuf/timestamp.proto"; //importação para usar o timestamp
 package greet;
 
 //APLICAÇÃO CLIENTE
-service ClienteUtilizador {
+service ClienteUtilizadorP {
 	rpc RegistarAposta (Aposta) returns (EstadoAposta);
 	rpc HistoricoApostas (PedidoHistorico) returns (ResultadoHistorico);
 }
@@ -27,7 +27,7 @@ message ResultadoHistorico {
 	repeated string HistoricoApostas = 2; //Numero Utilizador + Chave + Numero Sorteio
 
 }	//APLICAÇÃO GESTOR SORTEIO
-service ClienteGestorSorteio {
+service ClienteGestorSorteioP {
 	rpc GerirSorteio (Resultado) returns (EstadoResultado);
 }
 
@@ -41,11 +41,10 @@ message EstadoResultado {
 }
 
 	//APLICAÇÃO ADMINISTRADOR
-service ClienteAdministrador{
+service ClienteAdministradorP{
 	rpc Arquivar (ArquivoInput) returns (ArquivoResposta);
 	rpc Consultar (ConsultarInput) returns (ConsultarResposta);
 }
-
 
 message ArquivoInput {
 	repeated string HistoricoApostas = 1; //Numero Utilizador + Chave

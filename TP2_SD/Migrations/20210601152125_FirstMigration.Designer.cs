@@ -10,7 +10,7 @@ using TP2_SD.Database;
 namespace TP2_SD.Migrations
 {
     [DbContext(typeof(ChavesContext))]
-    [Migration("20210601150843_FirstMigration")]
+    [Migration("20210601152125_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Grpc.Net.Client;
 using System.Windows.Forms;
 
 namespace ClienteUtilizador
@@ -23,28 +25,37 @@ namespace ClienteUtilizador
             
         }
 
-        private void buttonConfirmar_Click(object sender, EventArgs e)
+        private async Task buttonConfirmar_ClickAsync(object sender, EventArgs e)
         {
             var Reg = new Regex("[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]");
             string NIF="";
-            string[] numeros = new string[5];
-            string[] estrelas = new string[2];
+            int[] _numeros = new int[5];
+            int[] _estrelas = new int[2];
             if (textBoxNif.Text!=null && textBoxNif.Text != "" && (Reg.IsMatch(textBoxNif.Text) == true))
             {
                 NIF = textBoxNif.Text;
                 if (buttonConfirmarUnlock() == true)
                 {
-                    numeros[0] = textBoxNum1.Text;
-                    numeros[1] = textBoxNum2.Text;
-                    numeros[2] = textBoxNum3.Text;
-                    numeros[3] = textBoxNum4.Text;
-                    numeros[4] = textBoxNum5.Text;
-                    estrelas[0] = textBoxEstrela1.Text; 
-                    estrelas[1] = textBoxEstrela2.Text;
+                    textBoxNum1.Text.ToInt32(_numeros[0]); // parseto
+                    textBoxNum2.Text.ToString(_numeros[0]);
+                    textBoxNum3.Text.ToString(_numeros[0]);
+                    textBoxNum4.Text.ToString(_numeros[0]);
+                    textBoxNum5.Text.ToString(_numeros[0]);
+                    _estrelas[0] = textBoxEstrela1.Text; 
+                    _estrelas[1] = textBoxEstrela2.Text;
 
                     //comunicação com o server testar/enviar
+                    using var channel = GrpcChannel.ForAddress("https://localhost:5001");
+                    var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
+                    var reply = await client.RegistarApostaAsync(
+                                     new Aposta {
+                                         NumeroApostador = NIF, 
+                                         numeros = numeros,
+                                         estrelas = 3;
+                                        DataAposta = 4;
+                });
 
-                    MessageBox.Show("Valid Response!", "Sucesso", MessageBoxButtons.YesNo);
+                    MessageBox.Show("Valid Response!", "Sucesso", MessageBoxButtons.OK);
                 }
             }
             else { MessageBox.Show("Por Favor Introduza um NIF Válido!", "Erro!", MessageBoxButtons.OK);}
@@ -78,7 +89,7 @@ namespace ClienteUtilizador
             else { MessageBox.Show("Números/Estrelas Por Preencher!", "Erro!", MessageBoxButtons.OK); return false; }
         }
 
-        private void buttonConsultar_Click(object sender, EventArgs e)
+        private async Task buttonConsultar_ClickAsync(object sender, EventArgs e)
         {
             var Reg = new Regex("[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]");
             string NIF = "";
@@ -88,8 +99,12 @@ namespace ClienteUtilizador
                 NIF = textBoxNif.Text;
 
                 //comunicação com o server testar/receber
+                using var channel = GrpcChannel.ForAddress("https://localhost:5001");
+                var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
+                var reply = await client.HistoricoApostasAsync(
+                                 new PedidoHistorico { NumeroApostador = NIF });
 
-                MessageBox.Show("Valid Response!", "Sucesso", MessageBoxButtons.YesNo);
+                MessageBox.Show("Valid Response!", "Sucesso", MessageBoxButtons.OK);
             }
             else { MessageBox.Show("Por Favor Introduza um NIF Válido!", "Erro!", MessageBoxButtons.OK); }
         }

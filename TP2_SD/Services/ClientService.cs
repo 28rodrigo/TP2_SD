@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace TP2_SD
 {
-    public class ClientService : ClienteUtilizador.ClienteUtilizadorBase
+    public class ClientService : ClienteUtilizadorP.ClienteUtilizadorPBase
     {
-        private readonly ILogger<ClientService> _logger;
-        public ClientService(ILogger<ClientService> logger)
+        private readonly ILogger<ClientService> _loggerU;
+        public ClientService(ILogger<ClientService> loggerU)
         {
-            _logger = logger;
+            _loggerU = loggerU;
         }
 
         public override Task<EstadoAposta>RegistarAposta(Aposta request, ServerCallContext context)
@@ -20,6 +20,15 @@ namespace TP2_SD
             return Task.FromResult(new EstadoAposta
             {
                 Estado = true
+            });
+        }
+
+        public override Task<ResultadoHistorico> HistoricoApostas(PedidoHistorico request, ServerCallContext context)
+        {
+            return Task.FromResult(new ResultadoHistorico
+            {
+                Estado = true,
+                HistoricoApostas = {}
             });
         }
     }

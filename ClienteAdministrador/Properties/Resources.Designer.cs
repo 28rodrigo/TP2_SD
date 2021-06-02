@@ -63,6 +63,16 @@ namespace ClienteAdministrador.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap iconAdmin {
+            get {
+                object obj = ResourceManager.GetObject("iconAdmin", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap iconSorteio {
             get {
                 object obj = ResourceManager.GetObject("iconSorteio", resourceCulture);

@@ -66,7 +66,7 @@ namespace ClienteUtilizador
             this.buttonConfirmar.TabIndex = 0;
             this.buttonConfirmar.Text = "Apostar";
             this.buttonConfirmar.UseVisualStyleBackColor = false;
-            this.buttonConfirmar.Click += new System.EventHandler(this.buttonConfirmar_Click);
+            this.buttonConfirmar.Click += new System.EventHandler(this.buttonConfirmar_ClickAsync);
             // 
             // label1
             // 
@@ -145,7 +145,7 @@ namespace ClienteUtilizador
             this.buttonConsultar.TabIndex = 5;
             this.buttonConsultar.Text = "Consultar";
             this.buttonConsultar.UseVisualStyleBackColor = false;
-            this.buttonConsultar.Click += new System.EventHandler(this.buttonConsultar_Click);
+            this.buttonConsultar.Click += new System.EventHandler(this.buttonConsultar_ClickAsync);
             // 
             // textBoxNum1
             // 

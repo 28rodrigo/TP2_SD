@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TP2_SD", "TP2_SD\TP2_SD.csproj", "{17294391-8CE2-4936-8BD6-1881DD68CDEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TP2_SD", "TP2_SD\TP2_SD.csproj", "{17294391-8CE2-4936-8BD6-1881DD68CDEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClienteUtilizador", "ClienteUtilizador\ClienteUtilizador.csproj", "{75BD07E7-4BC3-4805-A9C7-D06FF1412C0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClienteUtilizador", "ClienteUtilizador\ClienteUtilizador.csproj", "{75BD07E7-4BC3-4805-A9C7-D06FF1412C0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClienteAdministrador", "ClienteAdministrador\ClienteAdministrador.csproj", "{821D0AB1-DB3B-449B-BE6F-DB0F6327EE29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClienteAdministrador", "ClienteAdministrador\ClienteAdministrador.csproj", "{821D0AB1-DB3B-449B-BE6F-DB0F6327EE29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClienteGestor", "ClienteGestor\ClienteGestor.csproj", "{12169559-8361-40DF-941E-B62D1ECAB176}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClienteGestor", "ClienteGestor\ClienteGestor.csproj", "{12169559-8361-40DF-941E-B62D1ECAB176}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
