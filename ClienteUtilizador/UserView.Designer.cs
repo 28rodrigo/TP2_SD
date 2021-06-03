@@ -47,6 +47,11 @@ namespace ClienteUtilizador
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxNum5 = new System.Windows.Forms.TextBox();
             this.listViewRAnteriores = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
             this.label12 = new System.Windows.Forms.Label();
             this.textBoxEstrela2 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
@@ -73,12 +78,13 @@ namespace ClienteUtilizador
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.label1.Font = new System.Drawing.Font("Lucida Sans Unicode", 26.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.label1.Font = new System.Drawing.Font("Lucida Sans Unicode", 36F, ((System.Drawing.FontStyle)(((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic) 
+                | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(642, 71);
-            this.label1.MaximumSize = new System.Drawing.Size(430, 200);
+            this.label1.Location = new System.Drawing.Point(529, 37);
+            this.label1.MaximumSize = new System.Drawing.Size(550, 200);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(396, 84);
+            this.label1.Size = new System.Drawing.Size(538, 118);
             this.label1.TabIndex = 1;
             this.label1.Text = "Consultar Resultados Anteriores:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -93,11 +99,11 @@ namespace ClienteUtilizador
             this.textBoxNif.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textBoxNif.Font = new System.Drawing.Font("Lucida Sans Unicode", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxNif.HideSelection = false;
-            this.textBoxNif.Location = new System.Drawing.Point(180, 38);
+            this.textBoxNif.Location = new System.Drawing.Point(132, 50);
             this.textBoxNif.Margin = new System.Windows.Forms.Padding(6);
             this.textBoxNif.MaxLength = 9;
             this.textBoxNif.Name = "textBoxNif";
-            this.textBoxNif.Size = new System.Drawing.Size(415, 40);
+            this.textBoxNif.Size = new System.Drawing.Size(342, 40);
             this.textBoxNif.TabIndex = 2;
             this.textBoxNif.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxNif.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNif_KeyPress);
@@ -107,12 +113,13 @@ namespace ClienteUtilizador
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.label2.Font = new System.Drawing.Font("Lucida Sans Unicode", 26.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.label2.Font = new System.Drawing.Font("Lucida Sans Unicode", 36F, ((System.Drawing.FontStyle)(((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic) 
+                | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
             this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(174, 153);
+            this.label2.Location = new System.Drawing.Point(118, 145);
             this.label2.MaximumSize = new System.Drawing.Size(350, 200);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(253, 42);
+            this.label2.Size = new System.Drawing.Size(344, 59);
             this.label2.TabIndex = 3;
             this.label2.Text = "Nova Aposta:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -122,12 +129,13 @@ namespace ClienteUtilizador
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.label3.Font = new System.Drawing.Font("Lucida Sans Unicode", 26.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.label3.Font = new System.Drawing.Font("Lucida Sans Unicode", 36F, ((System.Drawing.FontStyle)(((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic) 
+                | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
             this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(92, 36);
+            this.label3.Location = new System.Drawing.Point(12, 37);
             this.label3.MaximumSize = new System.Drawing.Size(250, 200);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 42);
+            this.label3.Size = new System.Drawing.Size(119, 59);
             this.label3.TabIndex = 4;
             this.label3.Text = "NIF:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -139,10 +147,10 @@ namespace ClienteUtilizador
             this.buttonConsultar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonConsultar.Font = new System.Drawing.Font("Lucida Sans Unicode", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonConsultar.ForeColor = System.Drawing.Color.MintCream;
-            this.buttonConsultar.Location = new System.Drawing.Point(620, 642);
+            this.buttonConsultar.Location = new System.Drawing.Point(510, 634);
             this.buttonConsultar.Margin = new System.Windows.Forms.Padding(6);
             this.buttonConsultar.Name = "buttonConsultar";
-            this.buttonConsultar.Size = new System.Drawing.Size(447, 62);
+            this.buttonConsultar.Size = new System.Drawing.Size(582, 62);
             this.buttonConsultar.TabIndex = 5;
             this.buttonConsultar.Text = "Consultar";
             this.buttonConsultar.UseVisualStyleBackColor = false;
@@ -317,16 +325,47 @@ namespace ClienteUtilizador
             // listViewRAnteriores
             // 
             this.listViewRAnteriores.BackColor = System.Drawing.Color.MintCream;
+            this.listViewRAnteriores.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader5});
             this.listViewRAnteriores.Font = new System.Drawing.Font("Lucida Sans Unicode", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listViewRAnteriores.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewRAnteriores.HideSelection = false;
-            this.listViewRAnteriores.Location = new System.Drawing.Point(620, 161);
+            this.listViewRAnteriores.Location = new System.Drawing.Point(510, 161);
             this.listViewRAnteriores.Margin = new System.Windows.Forms.Padding(6);
             this.listViewRAnteriores.Name = "listViewRAnteriores";
-            this.listViewRAnteriores.Size = new System.Drawing.Size(447, 461);
+            this.listViewRAnteriores.Size = new System.Drawing.Size(582, 461);
             this.listViewRAnteriores.TabIndex = 6;
             this.listViewRAnteriores.UseCompatibleStateImageBehavior = false;
-            this.listViewRAnteriores.View = System.Windows.Forms.View.List;
+            this.listViewRAnteriores.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Nº Aposta";
+            this.columnHeader1.Width = 90;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Números";
+            this.columnHeader2.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Estrelas";
+            this.columnHeader3.Width = 80;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Premio";
+            this.columnHeader4.Width = 80;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Data";
+            this.columnHeader5.Width = 228;
             // 
             // label12
             // 
@@ -455,6 +494,11 @@ namespace ClienteUtilizador
         private System.Windows.Forms.TextBox textBoxEstrela2;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox textBoxEstrela1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }
 

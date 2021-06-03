@@ -64,7 +64,7 @@ namespace ClienteUtilizador
             if (textBoxNif.Text != null && textBoxNif.Text != "" && (Reg.IsMatch(textBoxNif.Text) == true))
             {
                 NIF = Int32.Parse(textBoxNif.Text);
-
+                listViewRAnteriores.Items.Clear();
                 //comunicação com o server testar/receber
                 using var channel = GrpcChannel.ForAddress("https://localhost:5001");
                 var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
@@ -74,10 +74,10 @@ namespace ClienteUtilizador
                 {
                     MessageBox.Show("Sucesso!", "Estado do Pedido:", MessageBoxButtons.OK);
                 }
-                else MessageBox.Show("O Pedido não pode ser retornado por um erro de servidor!", "Estado do Pedido:", MessageBoxButtons.OK);
-                for(int i=0; i<reply.HistoricoApostas.Count; i++)
+                else MessageBox.Show("O Pedido não pode ser retornado por um erro de servidor ou o Nif não existe!", "Estado do Pedido:", MessageBoxButtons.OK);
+                foreach (var ele in reply.HistoricoApostas)
                 {
-                    listViewRAnteriores.Items.Add(reply.HistoricoApostas.ElementAt(i));
+                    listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.Numeros, ele.Estrelas, ele.Premio.ToString(), ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
                 }
             }
             else { MessageBox.Show("Por Favor Introduza um NIF Válido!", "Erro!", MessageBoxButtons.OK); }
@@ -99,8 +99,10 @@ namespace ClienteUtilizador
                     _numeros[2] = Int32.Parse(textBoxNum3.Text);
                     _numeros[3] = Int32.Parse(textBoxNum4.Text);
                     _numeros[4] = Int32.Parse(textBoxNum5.Text);
+                    Array.Sort(_numeros);
                     _estrelas[0] = Int32.Parse(textBoxEstrela1.Text);
                     _estrelas[1] = Int32.Parse(textBoxEstrela2.Text);
+                    Array.Sort(_estrelas);
 
                     //comunicação com o server testar / enviar
                     using var channel = GrpcChannel.ForAddress("https://localhost:5001");
