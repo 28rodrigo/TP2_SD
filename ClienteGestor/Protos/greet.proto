@@ -43,9 +43,19 @@ message Resultado {
 	repeated int32 numeros = 1;
 	repeated int32 estrelas = 2;
 }
+
+message Vencedor{
+    int32 NumeroAposta=1;
+	int32 NIF=2;
+    string Numeros=3;//Numero Utilizador + Chave + Numero Sorteio
+    string Estrelas=4;
+    google.protobuf.Timestamp DataAposta=5;
+    int32 Premio=6;
+}
+
 message EstadoResultado {
 	bool Estado = 1;
-	repeated string ApostasVencedoras = 2;
+	repeated Vencedor ApostasVencedoras = 2;
 }
 
 	//APLICAÇÃO ADMINISTRADOR

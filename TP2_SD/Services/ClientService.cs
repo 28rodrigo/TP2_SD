@@ -32,7 +32,7 @@ namespace TP2_SD
                 var dbChavereturn = _dbcontext.Chaves.Add(NovaChave);
                 _dbcontext.SaveChanges();
                 int IdChave = NovaChave.ChaveId;
-                RegistoAposta NovaAposta = new RegistoAposta { NIF = request.NumeroApostador, Data = DateTime.UtcNow, Chave = NovaChave, Arquivada = false, Premio = 0 };
+                RegistoAposta NovaAposta = new RegistoAposta { NIF = request.NumeroApostador, Data = (request.DataAposta.ToDateTime()), Chave = NovaChave, Arquivada = false, Premio = 0 };
                 _dbcontext.Apostas.Add(NovaAposta);
                 _dbcontext.SaveChanges();
                 return Task.FromResult(new EstadoAposta
