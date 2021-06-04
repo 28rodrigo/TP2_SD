@@ -2,26 +2,34 @@ syntax = "proto3";
 
 option csharp_namespace = "ClienteGestor";
 import "google/protobuf/timestamp.proto"; //importação para usar o timestamp
-
+import "google/protobuf/empty.proto";
 package greet;
 
-//APLICAÇÃO CLIENTE
+//Serviço dedicado para o cliente UTILIZADOR 
 service ClienteUtilizadorP {
+	//Função para registar uma aposta
 	rpc RegistarAposta (Aposta) returns (EstadoAposta);
+	//Função para pedir historico de Apostas
 	rpc HistoricoApostas (PedidoHistorico) returns (ResultadoHistorico);
 }
+
+//Mensagem que contem a informação necessária das apostas 
 message Aposta {
 	int32 NumeroApostador = 1; //NIF
 	repeated int32 numeros = 2;
 	repeated int32 estrelas = 3;
 	google.protobuf.Timestamp DataAposta = 4; 
 }
+//Mensagem de retorno com o Estado de uma determinada operação -> Serviço ClienteUtilizadorP
 message EstadoAposta {
 	bool Estado = 1;
 }
+
+//Mensagem que contem a informação do Apostador para que seja possivel consultar o seu historico -> Serviço ClienteUtilizadorP 
 message PedidoHistorico {
 	int32 NumeroApostador = 1;
 }
+//Mensagem que contem informação completa de uma Aposta -> Usada na message ResultadoHistorico
 message Historico{
 	int32 NumeroAposta=1;
 	string Numeros =2;//Numero Utilizador + Chave + Numero Sorteio
@@ -29,21 +37,24 @@ message Historico{
 	google.protobuf.Timestamp DataAposta=4;
 	int32 Premio=5;
 }
+//Mensagem de retorno que contem todas as apostas já realizadas por um determinado Apostador e o Estado da operação -> Serviço ClienteUtilizadorP
 message ResultadoHistorico {
 	bool Estado = 1;
 	repeated Historico HistoricoApostas = 2; 
 } 
 
-	//APLICAÇÃO GESTOR SORTEIO
+//Serviço dedicado para o cliente GESTOR
 service ClienteGestorSorteioP {
+	//Função para determinar vencedores
 	rpc GerirSorteio (Resultado) returns (EstadoResultado);
 }
 
+//Mensagem que indica os numeros e as estrelas que foram sorteadas pelo Gestor -> Serviço ClienteGestorSorteioP
 message Resultado {
 	repeated int32 numeros = 1;
 	repeated int32 estrelas = 2;
 }
-
+//Mensagem que contem a toda a informação acerca de uma aposta Vencedora -> Usada na Mensagem EstadoResultado
 message Vencedor{
 	int32 NumeroAposta=1;
 	int32 NIF=2;
@@ -53,30 +64,31 @@ message Vencedor{
 	int32 Premio=6;
 }
 
+//Mensagem de retorno que contem todas as aposta vencedoras e tambem o estado da operação -> Serviço ClienteGestorSorteioP
 message EstadoResultado {
 	bool Estado = 1;
 	repeated Vencedor ApostasVencedoras = 2;
 }
 
-	//APLICAÇÃO ADMINISTRADOR
+//Serviço dedicado para o cliente ADMINISTRADOR
 service ClienteAdministradorP{
-	rpc Arquivar (ArquivoInput) returns (ArquivoResposta);
-	rpc Consultar (ConsultarInput) returns (ConsultarResposta);
+	//Função responsável por Arquivar apostas ativas
+	rpc Arquivar (google.protobuf.Empty) returns (ArquivoResposta);
+	//Função para consultar apostas ativas e utlizadores que já realizaram apostas
+	rpc Consultar (google.protobuf.Empty) returns (ConsultarResposta);
 }
 
-
-message ArquivoInput {
-	bool Pedido = 1; //Numero Utilizador + Chave
-}
+//Mensagem que retorna o estado da operação de arquivar apostas ativas -> Serviço ClienteAdministradorP
 message ArquivoResposta {
 	bool EstadoArquivo = 1;
 }
-message ConsultarInput {
-	bool Pedido = 1;
-}
+
+//Mensagem com a informação de um Utilizador -> Usado na mensagem ConsultarResposta
 message Utilizador{
 	int32 NIF=1;
 }
+
+//Menasgem de retorno que contêm toda informação acerca dos Utilizadores, das apostas ativas e do estado da operação
 message ConsultarResposta {
 	bool Estado = 1;
 	repeated Utilizador Utilizadores=2;

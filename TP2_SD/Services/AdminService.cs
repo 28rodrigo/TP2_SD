@@ -20,11 +20,17 @@ namespace TP2_SD
             _loggerA = loggerA;
             _dbcontext = dbcontext;
         }
-
-        public override Task<ArquivoResposta> Arquivar(ArquivoInput request, ServerCallContext context)
+        /// <summary>
+        /// Esta função é responsável por Arquivar todas as Apostas Ativas
+        /// </summary>
+        /// <param> <c>request</c> é um parametro de entrada Vazio -> Tipo Empty </param>
+        /// <param> <c>context</c> é o contexto do Server-Side Call </param>
+        /// <returns>Retorna o Estado (True/False) da operação: True -> Operação efetuada com sucesso ; False -> Operação falhou</returns>
+        public override Task<ArquivoResposta> Arquivar(Empty request, ServerCallContext context)
         {
             try
             {
+                //Atualizar os registos com o parametro Arquivado false para true
                 var ApostasAtivas = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).ToList();
                 ApostasAtivas.ForEach(ele => {
                     ele.Arquivada = true;
@@ -58,17 +64,28 @@ namespace TP2_SD
             
 
         }
-        public override Task<ConsultarResposta> Consultar(ConsultarInput request, ServerCallContext context)
+        /// <summary>
+        /// Esta função é responsável por consultar todos os Utilizadores que já registaram apostas e tambem de toda a informação das 
+        /// apostas que estão em sorteio
+        /// </summary>
+        /// <param> <c>request</c> é um parametro de entrada Vazio -> Tipo Empty </param>
+        /// <param> <c>context</c> é o contexto do Server-Side Call </param>
+        /// <returns>Retorna o estado(True/False) da operação e tambem a informação de todos os Utilizadores e das apostas ativas para sorteio</returns>
+        public override Task<ConsultarResposta> Consultar(Empty request, ServerCallContext context)
         {
+            //Consultar todos as apostas com NIF diferente
             var ApostasUsers = _dbcontext.Apostas.Include("Chave").ToList().GroupBy(elemento => elemento.NIF).Distinct().ToList();
             if (ApostasUsers.Count != 0 && ApostasUsers != null)
             {
+                //Para retornar a informação ao cliente é necessário fazer a "tradução" da informação: List -> RepeatableField
                 RepeatedField<Utilizador> ApostadoresConvertidos = new RepeatedField<Utilizador>();
                 RepeatedField<Historico> ApostasConvertidas = new RepeatedField<Historico>();
                 ApostasUsers.ForEach((elem) =>
                 {
                     ApostadoresConvertidos.Add(new Utilizador { NIF = elem.Key });
                 });
+
+                //Consultar apostas ativas
                 var Apostas = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).ToList();
                 Apostas.ForEach((element) =>
                 {

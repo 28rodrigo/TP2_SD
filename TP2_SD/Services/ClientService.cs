@@ -22,12 +22,20 @@ namespace TP2_SD
             _dbcontext = dbcontext;
         }
 
+        /// <summary>
+        /// Esta função é responsável por registar uma aposta na base de dados 
+        /// </summary>
+        /// <param> <c>request</c> são os parametros de Entrada enviados pelo cliente -> Tipo Aposta </param>
+        /// <param> <c>context</c> é o contexto do Server-Side Call </param>
+        /// <returns>Retorna o Estado (True/False) da operação: True -> Operação efetuada com sucesso ; False -> Operação falhou</returns>
         public override Task<EstadoAposta>RegistarAposta(Aposta request, ServerCallContext context)
         {
             try
-            {
+            {   //Transformar os Arrays de inteiros (Numeros e Estrelas) recebidos no parametro de entrada para String para serem armazenados na BD.
                 string NumerosReceived = request.Numeros[0] + "," + request.Numeros[1] + "," + request.Numeros[2] + "," + request.Numeros[3] + "," + request.Numeros[4];
                 string EstrelasReceived = request.Estrelas[0] + "," + request.Estrelas[1];
+                
+                //Guardar dados na BD e retornar Estado.
                 RegistoChave NovaChave = new RegistoChave { Numeros = NumerosReceived, Estrelas = EstrelasReceived };
                 var dbChavereturn = _dbcontext.Chaves.Add(NovaChave);
                 _dbcontext.SaveChanges();
@@ -48,12 +56,19 @@ namespace TP2_SD
                 });
             }
         }
-
+        /// <summary>
+        /// Esta função é responsável por obter o histórico de Apostas de um determinado Utilizador(NIF)
+        /// </summary>
+        /// <param> <c>request</c> são os parametros de Entrada enviados pelo cliente -> Tipo PedidoHistorico </param>
+        /// <param> <c>context</c> é o contexto do Server-Side Call </param>
+        /// <returns> Retorna o estado da operação(true/false) e toda a informação das Apostas de um determinado Utilizador </returns>
         public override Task<ResultadoHistorico> HistoricoApostas(PedidoHistorico request, ServerCallContext context)
         {
+            //Consultar Apostas com determinado NIF
             var ApostasNif = _dbcontext.Apostas.Include("Chave").Where(element => element.NIF == request.NumeroApostador).ToList();
             if (ApostasNif != null)
             {
+                //Para retornar a informação ao cliente é necessário fazer a "tradução" da informação: List-> RepeatableField
                 RepeatedField<Historico> ApostasNifConverted = new RepeatedField<Historico>();
                 ApostasNif.ForEach((element) =>
                 {

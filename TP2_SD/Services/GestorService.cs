@@ -24,25 +24,36 @@ namespace TP2_SD
             _dbcontext = dbcontext;
         }
 
+        /// <summary>
+        /// Esta função GerirSorteio é responsável por obter os Vencedores e calcular todos os Prémios dos participantes do sorteio.
+        /// </summary>
+        /// <param> <c>request</c> são os parametros de Entrada enviados pelo cliente -> Tipo Resultado </param>
+        /// <param> <c>context</c> é o contexto do Server-Side Call </param>
+        /// <returns>Retorna o estado da operação (true/false) e a informação das Apostas Vencedoras</returns>
         public override Task<EstadoResultado>GerirSorteio(Resultado request, ServerCallContext context)
-        {
+        {   
+            //Consultar Apostas ativas 
             var ApostasAtivas = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).ToList();
+
+            //Calcular Prémios
             ApostasAtivas.ForEach(ele => {
                 var NumerosString=ele.Chave.Numeros;
                 var EstrelasString = ele.Chave.Estrelas;
-                int[] _numeros = CalculoPremios.ConvertArrayToInt(NumerosString);
-                int[] _estrelas = CalculoPremios.ConvertArrayToInt(EstrelasString);
+                int[] _numeros = CalculoPremios.ConvertArrayToInt(NumerosString,',');
+                int[] _estrelas = CalculoPremios.ConvertArrayToInt(EstrelasString,',');
                 int _premio = CalculoPremios.CalcularPremio(_numeros, _estrelas, request.Numeros.ToArray(), request.Estrelas.ToArray());
                 ele.Premio = _premio;
                 _dbcontext.Apostas.Update(ele);
             });
             _dbcontext.SaveChanges();
 
+            //Consultar Apostas Vencedoras
             var ApostasWin = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).Where(element => element.Premio != 0).OrderBy(element => element.Premio).ToList();
 
 
             if (ApostasWin != null)
             {
+                //Para retornar a informação ao cliente é necessário fazer a "tradução" da informação List-> RepeatableField
                 RepeatedField<Vencedor> ApostasWinConverted = new RepeatedField<Vencedor>();
                 ApostasWin.ForEach((element) =>
                 {

@@ -16,14 +16,25 @@ namespace ClienteAdministrador
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Função disparada quando é clicado o botão Cancel que fecha a Aplicação
+        /// </summary>
+        /// <param><c>sender</c>referencia ao objeto que disparou esta função</param>
+        /// <param><c>er</c>referencia ao evento Click</param>
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
+        /// <summary>
+        /// Função disparada quando o utilizador clica no botão OK e que é responsável por testar o formato/Padrão dos dados 
+        /// inseridos(IP e Porta) para assegurar que dados são válidos e caso sejam válidos rederecionar para a proxima View
+        /// </summary>
+        /// <param><c>sender</c>referencia ao objeto que disparou esta função</param>
+        /// <param><c>er</c>referencia ao evento Click</param>
         private void buttonOK_Click(object sender, EventArgs e)
         {
+            //definir padroes para testar inputs
             string Address;
             string PatternIp = @"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)$";
             string PatternPorta = @"^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$";
@@ -34,18 +45,26 @@ namespace ClienteAdministrador
             //string[] Auxiliar = AUX.Split(";");
             if ((RegTestIP.IsMatch(AUXIP) == false) || (RegTestPort.IsMatch(AUXPORT) == false))
             {
-                MessageBox.Show("Erro de ligação!", "Erro!", MessageBoxButtons.OK);
+                //ip e/ou porto são inválidos
+                MessageBox.Show("Ip e/ou Porta são inválidos!", "Erro!", MessageBoxButtons.OK);
                 return;
             }
+            //definir address de ligação
             Address = "http://" + AUXIP + ":" + AUXPORT;
+            //Chamar uma nova adminView -> View Principal deste cliente
             AdminView adminView = new AdminView(Address);
             adminView.FormClosed += new FormClosedEventHandler(adminView_FormClosed);
             adminView.Show();
 
-            // Since this.Hide() for some reason doesn't work, i'll have to do this crap
+            // Esconder esta página
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
         }
+        /// <summary>
+        /// Função necessária para assegurar que quando Aplicação é fechada esta view é tambem fechada.
+        /// </summary>
+        /// <param><c>sender</c>referencia ao objeto que disparou esta função</param>
+        /// <param><c>er</c>referencia ao evento Close</param>
         private void adminView_FormClosed(object sender, FormClosedEventArgs e)
         {
             this.Close();
