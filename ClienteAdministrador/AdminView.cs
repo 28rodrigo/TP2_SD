@@ -40,72 +40,68 @@ namespace ClienteAdministrador
                     if (reply.Estado)
                     {
                         loopSucess = true;
-                        //var ApostasAtivas = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).ToList();
-                        //foreach (var ele in reply.Utilizadores.ToList())
-                        //{
-                        //    listViewUtilizadores.Items.Add(ele.Utilizadores);
-                        //}
-                        //foreach (var ele in reply.Apostas)
-                        //{
-                        //    listViewChaves.Items.Add(ele.Apostas.SubItems.AddRange(new string[] { ele.Numeros, ele.Estrelas, ele.Premio.ToString(), ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
-                        //}
                         foreach (var element in reply.Utilizadores)
                             listViewUtilizadores.Items.Add(element.NIF.ToString());
 
                         foreach (var element in reply.Apostas)
                             listViewChaves.Items.Add(element.NumeroAposta.ToString()).SubItems.AddRange(new string[] { element.Numeros, element.Estrelas, element.Premio.ToString(), element.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
-
                     }
-                    else MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                    else
+                    {
+                        MessageBox.Show("Erro de Conexão ao server!", "Estado da Ligação:", MessageBoxButtons.OK);
+                        loopSucess = true;
+                    }                
                 }
                 catch
                 {
                     loopAux++;
-                    MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                    MessageBox.Show("Erro de Conexão ao server!", "Estado da Ligação:", MessageBoxButtons.OK);
                 }
             }
             
         }
 
-        public string ShowMyDialogBox()
-        {
-            DialogIpBox testDialog = new DialogIpBox();
-            string text = "";
-            // Show testDialog as a modal dialog and determine if DialogResult = OK.
-            try
-            {
-                if (testDialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    // Read the contents of testDialog's TextBox.
-                    text = testDialog.textBoxIP.Text + ";" + testDialog.textBoxPort.Text;
-                }
-                else
-                {
-                    text = "";
-                }
-            }
-            catch
-            {
-                System.Environment.Exit(1);
-            }
-            testDialog.Dispose();
-            return text;
-        }
-
         private void AdminView_Load(object sender, EventArgs e)
         {
-
-           
-
-
-            //buscar dados á base de dados
+            //buscar dados á base de dados (GRPC)
             ListLoader();
-
         }
 
-        private void buttonArquivar_Click(object sender, EventArgs e)
+        private async void buttonArquivar_Click(object sender, EventArgs e)
         {
+            var loopAux = 0;
+            var loopSucess = false;
+            while (loopAux < 3 && !loopSucess)
+            {
+                try
+                {
+                    var httpHandler = new HttpClientHandler();
+                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                    using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                    var client = new ClienteAdministradorP.ClienteAdministradorPClient(channel);
+                    var reply = await client.ArquivarAsync(new ArquivoInput { Pedido = true });
+                    //enviar mensagem
 
+                    if (reply.EstadoArquivo)
+                    {
+                        MessageBox.Show("Apostas Arquivadas com sucesso!", "Estado da Aposta:", MessageBoxButtons.OK);
+                        loopSucess = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Não há apostas para arquivar!", "Estado da Aposta:", MessageBoxButtons.OK);
+                        loopSucess = true;
+                    }
+                    //limpar lista
+                    listViewChaves.Items.Clear();
+                }
+                catch
+                {
+                    loopAux++;
+                    MessageBox.Show("A operação não pode prosseguir por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                }
+            }
         }
     }
 }

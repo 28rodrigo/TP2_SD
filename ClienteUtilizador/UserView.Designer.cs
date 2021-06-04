@@ -465,10 +465,8 @@ namespace ClienteUtilizador
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "UserView";
             this.Text = "Cliente Utilizador Euromilhões";
-            this.Load += new System.EventHandler(this.UserView_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

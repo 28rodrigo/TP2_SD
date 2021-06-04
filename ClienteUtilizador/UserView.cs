@@ -23,36 +23,6 @@ namespace ClienteUtilizador
             Address = _Address;
         }
 
-        private void UserView_Load(object sender, EventArgs e)
-        {
-            
-        }
-
-        public string ShowMyDialogBox()
-        {
-            DialogBoxIp testDialog = new DialogBoxIp();
-            string text = "";
-            // Show testDialog as a modal dialog and determine if DialogResult = OK.
-            try
-            {
-                if (testDialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    // Read the contents of testDialog's TextBox.
-                    text = testDialog.textBoxIP.Text + ";" + testDialog.textBoxPort.Text;
-                }
-                else
-                {
-                    text = "";
-                }
-            }
-            catch
-            {
-                System.Environment.Exit(1);
-            }
-            testDialog.Dispose();
-            return text;
-        }
-
         private bool buttonConfirmarUnlock()
         {
             var RegNum1 = new Regex("[1-9]");
@@ -87,34 +57,46 @@ namespace ClienteUtilizador
         {
             var Reg = new Regex("[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]");
             int NIF = 0;
-            try
+            var loopAux = 0;
+            var loopSucess = false;
+            while (loopAux < 3 && !loopSucess)
             {
-                if (textBoxNif.Text != null && textBoxNif.Text != "" && (Reg.IsMatch(textBoxNif.Text) == true))
+                try
                 {
-                    NIF = Int32.Parse(textBoxNif.Text);
-                    listViewRAnteriores.Items.Clear();
-                    //comunicação com o server testar/receber
-                    var httpHandler = new HttpClientHandler();
-                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-                    using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                    var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
-                    var reply = await client.HistoricoApostasAsync(new PedidoHistorico { NumeroApostador = NIF });
-                    if (reply.Estado)
+                    if (textBoxNif.Text != null && textBoxNif.Text != "" && (Reg.IsMatch(textBoxNif.Text) == true))
                     {
-                        MessageBox.Show("Sucesso!", "Estado do Pedido:", MessageBoxButtons.OK);
+                        NIF = Int32.Parse(textBoxNif.Text);
+                        listViewRAnteriores.Items.Clear();
+                        //comunicação com o server testar/receber
+                        var httpHandler = new HttpClientHandler();
+                        httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                        using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                        var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
+                        var reply = await client.HistoricoApostasAsync(new PedidoHistorico { NumeroApostador = NIF });
+                        if (reply.Estado)
+                        {
+                            MessageBox.Show("Sucesso!", "Estado do Pedido:", MessageBoxButtons.OK);
+                            loopSucess = true;
+                        }
+                        else
+                        {
+                            loopSucess = true;
+                            MessageBox.Show("O Pedido não pode ser retornado por um erro de servidor ou o Nif não existe!", "Estado do Pedido:", MessageBoxButtons.OK); 
+                        }
+
+                        foreach (var ele in reply.HistoricoApostas)
+                        {
+                            listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.Numeros, ele.Estrelas, ele.Premio.ToString(), ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
+                        }
                     }
-                    else MessageBox.Show("O Pedido não pode ser retornado por um erro de servidor ou o Nif não existe!", "Estado do Pedido:", MessageBoxButtons.OK);
-                    foreach (var ele in reply.HistoricoApostas)
-                    {
-                        listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.Numeros, ele.Estrelas, ele.Premio.ToString(), ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
-                    }
+                    else { MessageBox.Show("Por Favor Introduza um NIF Válido!", "Erro!", MessageBoxButtons.OK); }
                 }
-                else { MessageBox.Show("Por Favor Introduza um NIF Válido!", "Erro!", MessageBoxButtons.OK); }
-            }
-            catch
-            {
-                MessageBox.Show("O Pedido não pode ser retornado por um erro de ligação aoservidor!", "Estado do Pedido:", MessageBoxButtons.OK);
+                catch
+                {
+                    loopAux++;
+                    MessageBox.Show("O Pedido não pode ser retornado por um erro de ligação aoservidor!", "Estado do Pedido:", MessageBoxButtons.OK);
+                }
             }
         }
 
@@ -126,45 +108,56 @@ namespace ClienteUtilizador
             int[] _estrelas = new int[2];
             if (textBoxNif.Text != null && textBoxNif.Text != "" && (Reg.IsMatch(textBoxNif.Text) == true))
             {
-                try
+                var loopAux = 0;
+                var loopSucess = false;
+                while (loopAux < 3 && !loopSucess)
                 {
-                    NIF = Int32.Parse(textBoxNif.Text);
-                    if (buttonConfirmarUnlock())
+                    try
                     {
-                        _numeros[0] = Int32.Parse(textBoxNum1.Text);
-                        _numeros[1] = Int32.Parse(textBoxNum2.Text);
-                        _numeros[2] = Int32.Parse(textBoxNum3.Text);
-                        _numeros[3] = Int32.Parse(textBoxNum4.Text);
-                        _numeros[4] = Int32.Parse(textBoxNum5.Text);
-                        Array.Sort(_numeros);
-                        _estrelas[0] = Int32.Parse(textBoxEstrela1.Text);
-                        _estrelas[1] = Int32.Parse(textBoxEstrela2.Text);
-                        Array.Sort(_estrelas);
-
-                        //comunicação com o server testar / enviar
-                        var httpHandler = new HttpClientHandler();
-                        httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-                        using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                        var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
-                        var reply = await client.RegistarApostaAsync(
-                            new Aposta
-                            {
-                                NumeroApostador = NIF,
-                                Numeros = { _numeros[0], _numeros[1], _numeros[2], _numeros[3], _numeros[4] },
-                                Estrelas = { _estrelas[0], _estrelas[1] },
-                                DataAposta = Timestamp.FromDateTime(DateTime.UtcNow)
-                            });
-                        if (reply.Estado)
+                        NIF = Int32.Parse(textBoxNif.Text);
+                        if (buttonConfirmarUnlock())
                         {
-                            MessageBox.Show("Aposta subemetida com sucesso!", "Estado da Aposta:", MessageBoxButtons.OK);
+                            _numeros[0] = Int32.Parse(textBoxNum1.Text);
+                            _numeros[1] = Int32.Parse(textBoxNum2.Text);
+                            _numeros[2] = Int32.Parse(textBoxNum3.Text);
+                            _numeros[3] = Int32.Parse(textBoxNum4.Text);
+                            _numeros[4] = Int32.Parse(textBoxNum5.Text);
+                            Array.Sort(_numeros);
+                            _estrelas[0] = Int32.Parse(textBoxEstrela1.Text);
+                            _estrelas[1] = Int32.Parse(textBoxEstrela2.Text);
+                            Array.Sort(_estrelas);
+
+                            //comunicação com o server testar / enviar
+                            var httpHandler = new HttpClientHandler();
+                            httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                            using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                            var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
+                            var reply = await client.RegistarApostaAsync(
+                                new Aposta
+                                {
+                                    NumeroApostador = NIF,
+                                    Numeros = { _numeros[0], _numeros[1], _numeros[2], _numeros[3], _numeros[4] },
+                                    Estrelas = { _estrelas[0], _estrelas[1] },
+                                    DataAposta = Timestamp.FromDateTime(DateTime.UtcNow)
+                                });
+                            if (reply.Estado)
+                            {
+                                loopSucess = true;
+                                MessageBox.Show("Aposta subemetida com sucesso!", "Estado da Aposta:", MessageBoxButtons.OK);
+                            }
+                            else
+                            {
+                                loopSucess = true;
+                                MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                            }
                         }
-                        else MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
                     }
-                }
-                catch
-                {
-                    MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                    catch
+                    {
+                        loopAux++;
+                        MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                    }
                 }
                 
             }

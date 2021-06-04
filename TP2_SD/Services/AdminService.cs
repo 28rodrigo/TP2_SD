@@ -31,18 +31,28 @@ namespace TP2_SD
                     _dbcontext.Apostas.Update(ele);
                 });
                 _dbcontext.SaveChanges();
-                return Task.FromResult(new ArquivoResposta
+                if(ApostasAtivas.Count==0)
                 {
-                    EstadoArquivo = true
+                    return Task.FromResult(new ArquivoResposta
+                    {
+                        EstadoArquivo = false
 
-                }); ;
+                    }); ;
+                }
+                else
+                {
+                    return Task.FromResult(new ArquivoResposta
+                    {
+                        EstadoArquivo = true
+
+                    }); ;
+                }
             }
             catch
             {
                 return Task.FromResult(new ArquivoResposta
                 {
                     EstadoArquivo = false
-
                 }); ;
             }
             
@@ -50,15 +60,18 @@ namespace TP2_SD
         }
         public override Task<ConsultarResposta> Consultar(ConsultarInput request, ServerCallContext context)
         {
-            var Apostas = _dbcontext.Apostas.Include("Chave").Where(element=>element.Arquivada==false).ToList();
-            if (Apostas != null)
+            var ApostasUsers = _dbcontext.Apostas.Include("Chave").ToList().GroupBy(elemento => elemento.NIF).Distinct().ToList();
+            if (ApostasUsers.Count != 0 && ApostasUsers != null)
             {
                 RepeatedField<Utilizador> ApostadoresConvertidos = new RepeatedField<Utilizador>();
                 RepeatedField<Historico> ApostasConvertidas = new RepeatedField<Historico>();
+                ApostasUsers.ForEach((elem) =>
+                {
+                    ApostadoresConvertidos.Add(new Utilizador { NIF = elem.Key });
+                });
+                var Apostas = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).ToList();
                 Apostas.ForEach((element) =>
                 {
-                    ApostadoresConvertidos.Add(new Utilizador { NIF = element.NIF });
-
                     ApostasConvertidas.Add(new Historico
                     {
                         NumeroAposta = element.RegistoApostaId,
@@ -66,12 +79,9 @@ namespace TP2_SD
                         Estrelas = element.Chave.Estrelas,
                         DataAposta = Timestamp.FromDateTime(element.Data.ToUniversalTime()),
                         Premio = element.Premio
-
                     });
 
                 });
-
-
                 return Task.FromResult(new ConsultarResposta
                 {
                     Estado = true,

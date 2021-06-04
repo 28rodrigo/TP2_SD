@@ -20,32 +20,6 @@ namespace ClienteGestor
         {
             InitializeComponent();
             Address = _Address;
-
-        }
-
-        public string ShowMyDialogBox()
-        {
-            DialogBoxIP testDialog = new DialogBoxIP();
-            string text="";
-            // Show testDialog as a modal dialog and determine if DialogResult = OK.
-            try
-            {
-                if (testDialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    // Read the contents of testDialog's TextBox.
-                    text = testDialog.textBoxIP.Text + ";" + testDialog.textBoxPort.Text;
-                }
-                else
-                {
-                    text = "";
-                }
-            }
-            catch
-            {
-                System.Environment.Exit(1);
-            }
-            testDialog.Dispose();
-            return text;
         }
 
         private async void buttonConfirmarRegisto_Click(object sender, EventArgs e)
@@ -65,32 +39,43 @@ namespace ClienteGestor
                 Array.Sort(_estrelas);
 
                 //comunicação com o server testar/enviar chave vencedora /receber vencedores
-                try
+                var loopAux = 0;
+                var loopSucess = false;
+                while (loopAux < 3 && !loopSucess)
                 {
-                    var httpHandler = new HttpClientHandler();
-                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-                    using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                    var _client = new ClienteGestorSorteioP.ClienteGestorSorteioPClient(channel);
-                    var reply = await _client.GerirSorteioAsync(
-                        new Resultado
-                        {
-                            Numeros = { _numeros[0], _numeros[1], _numeros[2], _numeros[3], _numeros[4] },
-                            Estrelas = { _estrelas[0], _estrelas[1] }
-                        });
-                    if (reply.Estado)
+                    try
                     {
-                        MessageBox.Show("Aposta subemetida com sucesso!", "Estado da Aposta:", MessageBoxButtons.OK);
-                        foreach (var ele in reply.ApostasVencedoras)
+                        var httpHandler = new HttpClientHandler();
+                        httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                        using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                        var _client = new ClienteGestorSorteioP.ClienteGestorSorteioPClient(channel);
+                        var reply = await _client.GerirSorteioAsync(
+                            new Resultado
+                            {
+                                Numeros = { _numeros[0], _numeros[1], _numeros[2], _numeros[3], _numeros[4] },
+                                Estrelas = { _estrelas[0], _estrelas[1] }
+                            });
+                        if (reply.Estado)
                         {
-                            listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.NIF.ToString(), ele.Numeros, ele.Estrelas, ele.Premio.ToString()+"º", ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
+                            MessageBox.Show("Aposta subemetida com sucesso!", "Estado da Aposta:", MessageBoxButtons.OK);
+                            loopSucess = true;
+                            foreach (var ele in reply.ApostasVencedoras)
+                            {
+                                listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.NIF.ToString(), ele.Numeros, ele.Estrelas, ele.Premio.ToString() + "º", ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
+                            }
                         }
+                        else
+                        {
+                            loopSucess = true;
+                            MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                        } 
                     }
-                    else MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
-                }
-                catch( Exception ee)
-                {
-                    MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                    catch
+                    {
+                        loopAux++;
+                        MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                    }
                 }
 
             }

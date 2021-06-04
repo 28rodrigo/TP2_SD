@@ -34,7 +34,7 @@ namespace ClienteAdministrador
             //string[] Auxiliar = AUX.Split(";");
             if ((RegTestIP.IsMatch(AUXIP) == false) || (RegTestPort.IsMatch(AUXPORT) == false))
             {
-                MessageBox.Show("Números/Estrelas Repetidos!", "Erro!", MessageBoxButtons.OK);
+                MessageBox.Show("Erro de ligação!", "Erro!", MessageBoxButtons.OK);
                 return;
             }
             Address = "http://" + AUXIP + ":" + AUXPORT;

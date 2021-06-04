@@ -58,7 +58,7 @@ namespace ClienteAdministrador
             this.listViewChaves.Location = new System.Drawing.Point(206, 113);
             this.listViewChaves.Margin = new System.Windows.Forms.Padding(6);
             this.listViewChaves.Name = "listViewChaves";
-            this.listViewChaves.Size = new System.Drawing.Size(358, 392);
+            this.listViewChaves.Size = new System.Drawing.Size(543, 392);
             this.listViewChaves.TabIndex = 43;
             this.listViewChaves.UseCompatibleStateImageBehavior = false;
             this.listViewChaves.View = System.Windows.Forms.View.Details;
@@ -66,26 +66,31 @@ namespace ClienteAdministrador
             // columnHeader1
             // 
             this.columnHeader1.Text = "Nº Aposta";
+            this.columnHeader1.Width = 95;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Números";
             this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader2.Width = 140;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "Estrelas";
             this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader3.Width = 80;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "Prémio";
             this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader4.Width = 80;
             // 
             // columnHeader5
             // 
             this.columnHeader5.Text = "Data";
             this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader5.Width = 140;
             // 
             // label1
             // 
@@ -94,12 +99,12 @@ namespace ClienteAdministrador
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label1.Font = new System.Drawing.Font("Lucida Sans Unicode", 26.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(197, 23);
-            this.label1.MaximumSize = new System.Drawing.Size(430, 200);
+            this.label1.Location = new System.Drawing.Point(287, 23);
+            this.label1.MaximumSize = new System.Drawing.Size(530, 200);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(376, 84);
             this.label1.TabIndex = 42;
-            this.label1.Text = "Lista de Chaves Não Validadas:";
+            this.label1.Text = "Lista de Chaves Não Arquivadas:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // buttonArquivar
@@ -125,10 +130,10 @@ namespace ClienteAdministrador
             this.listViewUtilizadores.Font = new System.Drawing.Font("Lucida Sans Unicode", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listViewUtilizadores.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewUtilizadores.HideSelection = false;
-            this.listViewUtilizadores.Location = new System.Drawing.Point(591, 113);
+            this.listViewUtilizadores.Location = new System.Drawing.Point(761, 113);
             this.listViewUtilizadores.Margin = new System.Windows.Forms.Padding(6);
             this.listViewUtilizadores.Name = "listViewUtilizadores";
-            this.listViewUtilizadores.Size = new System.Drawing.Size(358, 392);
+            this.listViewUtilizadores.Size = new System.Drawing.Size(211, 392);
             this.listViewUtilizadores.TabIndex = 46;
             this.listViewUtilizadores.UseCompatibleStateImageBehavior = false;
             this.listViewUtilizadores.View = System.Windows.Forms.View.Details;
@@ -136,6 +141,7 @@ namespace ClienteAdministrador
             // columnHeader6
             // 
             this.columnHeader6.Text = "Utilizador";
+            this.columnHeader6.Width = 205;
             // 
             // label2
             // 
@@ -144,10 +150,10 @@ namespace ClienteAdministrador
             this.label2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label2.Font = new System.Drawing.Font("Lucida Sans Unicode", 26.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
             this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(579, 44);
-            this.label2.MaximumSize = new System.Drawing.Size(430, 200);
+            this.label2.Location = new System.Drawing.Point(744, 23);
+            this.label2.MaximumSize = new System.Drawing.Size(250, 200);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(393, 42);
+            this.label2.Size = new System.Drawing.Size(242, 84);
             this.label2.TabIndex = 47;
             this.label2.Text = "Lista de Utilizadores:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -159,7 +165,7 @@ namespace ClienteAdministrador
             this.BackColor = System.Drawing.Color.Honeydew;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(970, 520);
+            this.ClientSize = new System.Drawing.Size(987, 520);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.listViewUtilizadores);
             this.Controls.Add(this.buttonArquivar);

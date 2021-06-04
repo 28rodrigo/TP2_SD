@@ -52,9 +52,9 @@ namespace ClienteGestor
             this.label1.Location = new System.Drawing.Point(67, 9);
             this.label1.MaximumSize = new System.Drawing.Size(350, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(264, 50);
+            this.label1.Size = new System.Drawing.Size(263, 50);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Qual é o IP + Porto do Servidor a alcançar?";
+            this.label1.Text = "Qual é o IP + Porta do Servidor a alcançar?";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // buttonOK
@@ -107,7 +107,7 @@ namespace ClienteGestor
             this.Font = new System.Drawing.Font("Lucida Sans Unicode", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DialogBoxIP";
-            this.Text = "DialogBoxIP";
+            this.Text = "Ip+Porta Servidor";
             this.ResumeLayout(false);
             this.PerformLayout();
 
