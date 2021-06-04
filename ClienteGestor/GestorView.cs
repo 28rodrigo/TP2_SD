@@ -10,15 +10,17 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using System.Net.Http;
 
+
 namespace ClienteGestor
 {
     public partial class GestorView : Form
     {
         private string Address;
-        public GestorView()
+        public GestorView(string _Address)
         {
             InitializeComponent();
-            Address = "";
+            Address = _Address;
+
         }
 
         public string ShowMyDialogBox()
@@ -69,8 +71,8 @@ namespace ClienteGestor
                     httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
                     AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
                     using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                    var client = new ClienteGestorSorteioP.ClienteGestorSorteioPClient(channel);
-                    var reply = await client.GerirSorteioAsync(
+                    var _client = new ClienteGestorSorteioP.ClienteGestorSorteioPClient(channel);
+                    var reply = await _client.GerirSorteioAsync(
                         new Resultado
                         {
                             Numeros = { _numeros[0], _numeros[1], _numeros[2], _numeros[3], _numeros[4] },
@@ -86,7 +88,7 @@ namespace ClienteGestor
                     }
                     else MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
                 }
-                catch
+                catch( Exception ee)
                 {
                     MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
                 }
@@ -130,20 +132,5 @@ namespace ClienteGestor
             }
         }
 
-        private void GestorView_Load(object sender, EventArgs e)
-        {
-            string PatternIp = @"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)$";
-            string PatternPorta = @"^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$";
-            var RegTestIP = new Regex(PatternIp);
-            var RegTestPort = new Regex(PatternPorta);
-            var AUX = ShowMyDialogBox();
-            string[] Auxiliar = AUX.Split(";");
-            while ((RegTestIP.IsMatch(Auxiliar[0]) ==false) || (RegTestPort.IsMatch(Auxiliar[1]) == false))
-            {
-                AUX = ShowMyDialogBox();
-                Auxiliar = AUX.Split(";");
-            }
-            Address = "http://" + Auxiliar[0] + ":" + Auxiliar[1];
-        }
     }
 }

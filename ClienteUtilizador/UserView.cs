@@ -17,26 +17,15 @@ namespace ClienteUtilizador
     public partial class UserView : Form
     {
         private string Address;
-        public UserView()
+        public UserView(string _Address)
         {
             InitializeComponent();
-            Address = "";
+            Address = _Address;
         }
 
         private void UserView_Load(object sender, EventArgs e)
         {
-            string PatternIp = @"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)$";
-            string PatternPorta = @"^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$";
-            var RegTestIP = new Regex(PatternIp);
-            var RegTestPort = new Regex(PatternPorta);
-            var AUX = ShowMyDialogBox();
-            string[] Auxiliar = AUX.Split(";");
-            while ((RegTestIP.IsMatch(Auxiliar[0]) == false) || (RegTestPort.IsMatch(Auxiliar[1]) == false))
-            {
-                AUX = ShowMyDialogBox();
-                Auxiliar = AUX.Split(";");
-            }
-            Address = "http://" + Auxiliar[0] + ":" + Auxiliar[1];
+            
         }
 
         public string ShowMyDialogBox()
@@ -108,7 +97,7 @@ namespace ClienteUtilizador
                     var httpHandler = new HttpClientHandler();
                     httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
                     AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-                    using var channel = GrpcChannel.ForAddress("http://192.168.1.67:4800", new GrpcChannelOptions { HttpHandler = httpHandler });
+                    using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
                     var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
                     var reply = await client.HistoricoApostasAsync(new PedidoHistorico { NumeroApostador = NIF });
                     if (reply.Estado)
@@ -137,39 +126,47 @@ namespace ClienteUtilizador
             int[] _estrelas = new int[2];
             if (textBoxNif.Text != null && textBoxNif.Text != "" && (Reg.IsMatch(textBoxNif.Text) == true))
             {
-                NIF = Int32.Parse(textBoxNif.Text);
-                if (buttonConfirmarUnlock())
+                try
                 {
-                    _numeros[0] = Int32.Parse(textBoxNum1.Text);
-                    _numeros[1] = Int32.Parse(textBoxNum2.Text);
-                    _numeros[2] = Int32.Parse(textBoxNum3.Text);
-                    _numeros[3] = Int32.Parse(textBoxNum4.Text);
-                    _numeros[4] = Int32.Parse(textBoxNum5.Text);
-                    Array.Sort(_numeros);
-                    _estrelas[0] = Int32.Parse(textBoxEstrela1.Text);
-                    _estrelas[1] = Int32.Parse(textBoxEstrela2.Text);
-                    Array.Sort(_estrelas);
-
-                    //comunicação com o server testar / enviar
-                    var httpHandler = new HttpClientHandler();
-                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-                    using var channel = GrpcChannel.ForAddress("http://192.168.1.67:4800", new GrpcChannelOptions { HttpHandler = httpHandler });
-                    var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
-                    var reply = await client.RegistarApostaAsync(
-                        new Aposta
-                        {
-                            NumeroApostador = NIF,
-                            Numeros = { _numeros[0], _numeros[1], _numeros[2], _numeros[3], _numeros[4] },
-                            Estrelas = { _estrelas[0], _estrelas[1] },
-                            DataAposta = Timestamp.FromDateTime(DateTime.UtcNow)
-                        });
-                    if(reply.Estado)
+                    NIF = Int32.Parse(textBoxNif.Text);
+                    if (buttonConfirmarUnlock())
                     {
-                        MessageBox.Show("Aposta subemetida com sucesso!", "Estado da Aposta:", MessageBoxButtons.OK);
+                        _numeros[0] = Int32.Parse(textBoxNum1.Text);
+                        _numeros[1] = Int32.Parse(textBoxNum2.Text);
+                        _numeros[2] = Int32.Parse(textBoxNum3.Text);
+                        _numeros[3] = Int32.Parse(textBoxNum4.Text);
+                        _numeros[4] = Int32.Parse(textBoxNum5.Text);
+                        Array.Sort(_numeros);
+                        _estrelas[0] = Int32.Parse(textBoxEstrela1.Text);
+                        _estrelas[1] = Int32.Parse(textBoxEstrela2.Text);
+                        Array.Sort(_estrelas);
+
+                        //comunicação com o server testar / enviar
+                        var httpHandler = new HttpClientHandler();
+                        httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                        using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                        var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
+                        var reply = await client.RegistarApostaAsync(
+                            new Aposta
+                            {
+                                NumeroApostador = NIF,
+                                Numeros = { _numeros[0], _numeros[1], _numeros[2], _numeros[3], _numeros[4] },
+                                Estrelas = { _estrelas[0], _estrelas[1] },
+                                DataAposta = Timestamp.FromDateTime(DateTime.UtcNow)
+                            });
+                        if (reply.Estado)
+                        {
+                            MessageBox.Show("Aposta subemetida com sucesso!", "Estado da Aposta:", MessageBoxButtons.OK);
+                        }
+                        else MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
                     }
-                    else MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
                 }
+                catch
+                {
+                    MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                }
+                
             }
             else { MessageBox.Show("Por Favor Introduza um NIF Válido!", "Erro!", MessageBoxButtons.OK); }
         }

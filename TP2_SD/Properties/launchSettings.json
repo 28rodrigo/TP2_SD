@@ -5,13 +5,14 @@
       "launchBrowser": false,
       "Endpoints": {
         "Http": {
-          "Url": "http://192.168.1.67:4800",
+          "Url": "http://192.168.1.107:5001",
           "Protocols": "Http1"
         },
         "HttpsInlineCertFile": {
-          "Url": "https://192.168.1.67:4800",
+          "Url": "https://192.168.1.107:5001",
           "Protocols": "Http1AndHttp2"
         }
       }
     }
+  }
 }

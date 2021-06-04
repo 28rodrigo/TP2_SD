@@ -16,40 +16,55 @@ namespace ClienteAdministrador
     public partial class AdminView : Form
     {
         private string Address;
-        public AdminView()
+        public AdminView(string _Address)
         {
             InitializeComponent();
-            Address = "";
+            Address = _Address;
         }
 
         public async void ListLoader()
         {
-            try
+            var loopAux = 0;
+            var loopSucess = false;
+            while(loopAux<3 && !loopSucess)
             {
-                var httpHandler = new HttpClientHandler();
-                httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-                using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                var client = new ClienteAdministradorP.ClienteAdministradorPClient(channel);
-                var reply = await client.ConsultarAsync(new ConsultarInput { Pedido = true });
-                if (reply.Estado)
+                try
                 {
-                    var ApostasAtivas = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).ToList();
-                    foreach (var ele in reply.Utilizadores.ToList())
+                    var httpHandler = new HttpClientHandler();
+                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
+                    using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                    var client = new ClienteAdministradorP.ClienteAdministradorPClient(channel);
+                    var reply = await client.ConsultarAsync(new ConsultarInput { Pedido = true });
+                    if (reply.Estado)
                     {
-                        listViewUtilizadores.Items.Add(ele.Utilizadores);
+                        loopSucess = true;
+                        //var ApostasAtivas = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).ToList();
+                        //foreach (var ele in reply.Utilizadores.ToList())
+                        //{
+                        //    listViewUtilizadores.Items.Add(ele.Utilizadores);
+                        //}
+                        //foreach (var ele in reply.Apostas)
+                        //{
+                        //    listViewChaves.Items.Add(ele.Apostas.SubItems.AddRange(new string[] { ele.Numeros, ele.Estrelas, ele.Premio.ToString(), ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
+                        //}
+                        foreach (var element in reply.Utilizadores)
+                            listViewUtilizadores.Items.Add(element.NIF.ToString());
+
+                        foreach (var element in reply.Apostas)
+                            listViewChaves.Items.Add(element.NumeroAposta.ToString()).SubItems.AddRange(new string[] { element.Numeros, element.Estrelas, element.Premio.ToString(), element.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
+
                     }
-                    foreach (var ele in reply.Apostas)
-                    {
-                        listViewChaves.Items.Add(ele.Apostas.SubItems.AddRange(new string[] { ele.Numeros, ele.Estrelas, ele.Premio.ToString(), ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
-                    }
+                    else MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
                 }
-                else MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                catch
+                {
+                    loopAux++;
+                    MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                }
             }
-            catch
-            {
-                MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
-            }
+            
         }
 
         public string ShowMyDialogBox()
@@ -79,18 +94,18 @@ namespace ClienteAdministrador
 
         private void AdminView_Load(object sender, EventArgs e)
         {
-            string PatternIp = @"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)$";
-            string PatternPorta = @"^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$";
-            var RegTestIP = new Regex(PatternIp);
-            var RegTestPort = new Regex(PatternPorta);
-            var AUX = ShowMyDialogBox();
-            string[] Auxiliar = AUX.Split(";");
-            while ((RegTestIP.IsMatch(Auxiliar[0]) == false) || (RegTestPort.IsMatch(Auxiliar[1]) == false))
-            {
-                AUX = ShowMyDialogBox();
-                Auxiliar = AUX.Split(";");
-            }
-            Address = "http://" + Auxiliar[0] + ":" + Auxiliar[1];
+
+           
+
+
+            //buscar dados á base de dados
+            ListLoader();
+
+        }
+
+        private void buttonArquivar_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

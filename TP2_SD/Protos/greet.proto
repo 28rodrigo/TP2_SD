@@ -23,15 +23,15 @@ message PedidoHistorico {
 	int32 NumeroApostador = 1;
 }
 message Historico{
-    int32 NumeroAposta=1;
-    string Numeros =2;//Numero Utilizador + Chave + Numero Sorteio
-    string Estrelas =3;
-    google.protobuf.Timestamp DataAposta=4;
-    int32 Premio=5;
+	int32 NumeroAposta=1;
+	string Numeros =2;//Numero Utilizador + Chave + Numero Sorteio
+	string Estrelas =3;
+	google.protobuf.Timestamp DataAposta=4;
+	int32 Premio=5;
 }
 message ResultadoHistorico {
-    bool Estado = 1;
-    repeated Historico HistoricoApostas = 2; 
+	bool Estado = 1;
+	repeated Historico HistoricoApostas = 2; 
 } 
 
 	//APLICAÇÃO GESTOR SORTEIO
@@ -44,12 +44,12 @@ message Resultado {
 	repeated int32 estrelas = 2;
 }
 message Vencedor{
-    int32 NumeroAposta=1;
+	int32 NumeroAposta=1;
 	int32 NIF=2;
-    string Numeros=3;//Numero Utilizador + Chave + Numero Sorteio
-    string Estrelas=4;
-    google.protobuf.Timestamp DataAposta=5;
-    int32 Premio=6;
+	string Numeros=3;//Numero Utilizador + Chave + Numero Sorteio
+	string Estrelas=4;
+	google.protobuf.Timestamp DataAposta=5;
+	int32 Premio=6;
 }
 
 message EstadoResultado {
@@ -64,16 +64,19 @@ service ClienteAdministradorP{
 }
 
 message ArquivoInput {
-	repeated string HistoricoApostas = 1; //Numero Utilizador + Chave
+	bool Pedido = 1; //Numero Utilizador + Chave
 }
 message ArquivoResposta {
-	string EstadoArquivo = 1;
+	bool EstadoArquivo = 1;
 }
 message ConsultarInput {
 	bool Pedido = 1;
 }
+message Utilizador{
+	int32 NIF=1;
+}
 message ConsultarResposta {
 	bool Estado = 1;
-	repeated string Utilizadores = 2;
-	repeated string Apostas = 3;
+	repeated Utilizador Utilizadores=2;
+	repeated Historico Apostas =3;
 }

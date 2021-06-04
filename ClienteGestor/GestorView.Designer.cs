@@ -413,7 +413,6 @@ namespace ClienteGestor
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "GestorView";
             this.Text = "Gestor de Sorteio Euromilhões";
-            this.Load += new System.EventHandler(this.GestorView_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

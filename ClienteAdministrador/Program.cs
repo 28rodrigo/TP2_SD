@@ -17,7 +17,7 @@ namespace ClienteAdministrador
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AdminView());
+            Application.Run(new DialogIpBox());
         }
     }
 }
