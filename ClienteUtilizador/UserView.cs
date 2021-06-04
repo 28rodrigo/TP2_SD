@@ -16,14 +16,52 @@ namespace ClienteUtilizador
 {
     public partial class UserView : Form
     {
+        private string Address;
         public UserView()
         {
             InitializeComponent();
+            Address = "";
         }
 
         private void UserView_Load(object sender, EventArgs e)
         {
+            string PatternIp = @"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]?)$";
+            string PatternPorta = @"^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$";
+            var RegTestIP = new Regex(PatternIp);
+            var RegTestPort = new Regex(PatternPorta);
+            var AUX = ShowMyDialogBox();
+            string[] Auxiliar = AUX.Split(";");
+            while ((RegTestIP.IsMatch(Auxiliar[0]) == false) || (RegTestPort.IsMatch(Auxiliar[1]) == false))
+            {
+                AUX = ShowMyDialogBox();
+                Auxiliar = AUX.Split(";");
+            }
+            Address = "http://" + Auxiliar[0] + ":" + Auxiliar[1];
+        }
 
+        public string ShowMyDialogBox()
+        {
+            DialogBoxIp testDialog = new DialogBoxIp();
+            string text = "";
+            // Show testDialog as a modal dialog and determine if DialogResult = OK.
+            try
+            {
+                if (testDialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    // Read the contents of testDialog's TextBox.
+                    text = testDialog.textBoxIP.Text + ";" + testDialog.textBoxPort.Text;
+                }
+                else
+                {
+                    text = "";
+                }
+            }
+            catch
+            {
+                System.Environment.Exit(1);
+            }
+            testDialog.Dispose();
+            return text;
         }
 
         private bool buttonConfirmarUnlock()
@@ -60,27 +98,35 @@ namespace ClienteUtilizador
         {
             var Reg = new Regex("[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]");
             int NIF = 0;
-
-            if (textBoxNif.Text != null && textBoxNif.Text != "" && (Reg.IsMatch(textBoxNif.Text) == true))
+            try
             {
-                NIF = Int32.Parse(textBoxNif.Text);
-                listViewRAnteriores.Items.Clear();
-                //comunicação com o server testar/receber
-                using var channel = GrpcChannel.ForAddress("https://localhost:5001");
-                var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
-                var reply = await client.HistoricoApostasAsync(
-                                 new PedidoHistorico { NumeroApostador = NIF });
-                if (reply.Estado)
+                if (textBoxNif.Text != null && textBoxNif.Text != "" && (Reg.IsMatch(textBoxNif.Text) == true))
                 {
-                    MessageBox.Show("Sucesso!", "Estado do Pedido:", MessageBoxButtons.OK);
+                    NIF = Int32.Parse(textBoxNif.Text);
+                    listViewRAnteriores.Items.Clear();
+                    //comunicação com o server testar/receber
+                    var httpHandler = new HttpClientHandler();
+                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                    using var channel = GrpcChannel.ForAddress("http://192.168.1.67:4800", new GrpcChannelOptions { HttpHandler = httpHandler });
+                    var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
+                    var reply = await client.HistoricoApostasAsync(new PedidoHistorico { NumeroApostador = NIF });
+                    if (reply.Estado)
+                    {
+                        MessageBox.Show("Sucesso!", "Estado do Pedido:", MessageBoxButtons.OK);
+                    }
+                    else MessageBox.Show("O Pedido não pode ser retornado por um erro de servidor ou o Nif não existe!", "Estado do Pedido:", MessageBoxButtons.OK);
+                    foreach (var ele in reply.HistoricoApostas)
+                    {
+                        listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.Numeros, ele.Estrelas, ele.Premio.ToString(), ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
+                    }
                 }
-                else MessageBox.Show("O Pedido não pode ser retornado por um erro de servidor ou o Nif não existe!", "Estado do Pedido:", MessageBoxButtons.OK);
-                foreach (var ele in reply.HistoricoApostas)
-                {
-                    listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.Numeros, ele.Estrelas, ele.Premio.ToString(), ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
-                }
+                else { MessageBox.Show("Por Favor Introduza um NIF Válido!", "Erro!", MessageBoxButtons.OK); }
             }
-            else { MessageBox.Show("Por Favor Introduza um NIF Válido!", "Erro!", MessageBoxButtons.OK); }
+            catch
+            {
+                MessageBox.Show("O Pedido não pode ser retornado por um erro de ligação aoservidor!", "Estado do Pedido:", MessageBoxButtons.OK);
+            }
         }
 
         private async void buttonConfirmar_Click(object sender, EventArgs e)
@@ -105,7 +151,10 @@ namespace ClienteUtilizador
                     Array.Sort(_estrelas);
 
                     //comunicação com o server testar / enviar
-                    using var channel = GrpcChannel.ForAddress("https://localhost:5001");
+                    var httpHandler = new HttpClientHandler();
+                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                    using var channel = GrpcChannel.ForAddress("http://192.168.1.67:4800", new GrpcChannelOptions { HttpHandler = httpHandler });
                     var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
                     var reply = await client.RegistarApostaAsync(
                         new Aposta

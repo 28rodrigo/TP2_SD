@@ -63,7 +63,6 @@ service ClienteAdministradorP{
 	rpc Consultar (ConsultarInput) returns (ConsultarResposta);
 }
 
-
 message ArquivoInput {
 	repeated string HistoricoApostas = 1; //Numero Utilizador + Chave
 }

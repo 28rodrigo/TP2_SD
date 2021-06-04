@@ -350,7 +350,7 @@ namespace ClienteUtilizador
             // columnHeader2
             // 
             this.columnHeader2.Text = "Números";
-            this.columnHeader2.Width = 100;
+            this.columnHeader2.Width = 140;
             // 
             // columnHeader3
             // 
@@ -365,7 +365,7 @@ namespace ClienteUtilizador
             // columnHeader5
             // 
             this.columnHeader5.Text = "Data";
-            this.columnHeader5.Width = 228;
+            this.columnHeader5.Width = 188;
             // 
             // label12
             // 

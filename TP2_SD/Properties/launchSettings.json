@@ -3,10 +3,15 @@
     "TP2_SD": {
       "commandName": "Project",
       "launchBrowser": false,
-      "applicationUrl": "http://192.168.1.67:4800",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+      "Endpoints": {
+        "Http": {
+          "Url": "http://192.168.1.67:4800",
+          "Protocols": "Http1"
+        },
+        "HttpsInlineCertFile": {
+          "Url": "https://192.168.1.67:4800",
+          "Protocols": "Http1AndHttp2"
+        }
       }
     }
-  }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using System.Net.Http;
 
 namespace ClienteGestor
 {
@@ -64,7 +65,10 @@ namespace ClienteGestor
                 //comunicação com o server testar/enviar chave vencedora /receber vencedores
                 try
                 {
-                    using var channel = GrpcChannel.ForAddress(Address);
+                    var httpHandler = new HttpClientHandler();
+                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                    using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
                     var client = new ClienteGestorSorteioP.ClienteGestorSorteioPClient(channel);
                     var reply = await client.GerirSorteioAsync(
                         new Resultado
