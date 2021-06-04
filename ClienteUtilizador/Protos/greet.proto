@@ -13,8 +13,7 @@ service ClienteUtilizadorP {
 message Aposta {
 	int32 NumeroApostador = 1; 
 	repeated int32 Numeros = 2;
-	repeated int32 Estrelas = 3;
-	google.protobuf.Timestamp DataAposta = 4; 
+	repeated int32 Estrelas = 3; 
 }
 message EstadoAposta {
 	bool Estado = 1;
@@ -23,15 +22,15 @@ message PedidoHistorico {
 	int32 NumeroApostador = 1;
 }
 message Historico{
-    int32 NumeroAposta=1;
-    string Numeros =2;//Numero Utilizador + Chave + Numero Sorteio
-    string Estrelas =3;
-    google.protobuf.Timestamp DataAposta=4;
-    int32 Premio=5;
+	int32 NumeroAposta=1;
+	string Numeros =2;//Numero Utilizador + Chave + Numero Sorteio
+	string Estrelas =3;
+	google.protobuf.Timestamp DataAposta=4;
+	int32 Premio=5;
 }
 message ResultadoHistorico {
-    bool Estado = 1;
-    repeated Historico HistoricoApostas = 2; 
+	bool Estado = 1;
+	repeated Historico HistoricoApostas = 2; 
 } 
 
 	//APLICAÇÃO GESTOR SORTEIO

@@ -1,3 +1,4 @@
+using Grpc.Net.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,13 @@ namespace ClienteUtilizador
         [STAThread]
         static void Main()
         {
+            using var channel = GrpcChannel.ForAddress("https://localhost:5001");
+            var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
+
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new UserView());
+            Application.Run(new UserView(client));
         }
     }
 }

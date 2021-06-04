@@ -16,8 +16,10 @@ namespace ClienteUtilizador
 {
     public partial class UserView : Form
     {
-        public UserView()
+        private ClienteUtilizadorP.ClienteUtilizadorPClient _client;
+        public UserView(ClienteUtilizadorP.ClienteUtilizadorPClient client)
         {
+            _client = client;
             InitializeComponent();
         }
 
@@ -66,10 +68,11 @@ namespace ClienteUtilizador
                 NIF = Int32.Parse(textBoxNif.Text);
                 listViewRAnteriores.Items.Clear();
                 //comunicação com o server testar/receber
-                using var channel = GrpcChannel.ForAddress("https://localhost:5001");
-                var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
-                var reply = await client.HistoricoApostasAsync(
+                //using var channel = GrpcChannel.ForAddress("https://localhost:5001");
+                //var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
+                var reply = await _client.HistoricoApostasAsync(
                                  new PedidoHistorico { NumeroApostador = NIF });
+                
                 if (reply.Estado)
                 {
                     MessageBox.Show("Sucesso!", "Estado do Pedido:", MessageBoxButtons.OK);
@@ -105,15 +108,14 @@ namespace ClienteUtilizador
                     Array.Sort(_estrelas);
 
                     //comunicação com o server testar / enviar
-                    using var channel = GrpcChannel.ForAddress("https://localhost:5001");
-                    var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
-                    var reply = await client.RegistarApostaAsync(
+                    //using var channel = GrpcChannel.ForAddress("https://localhost:5001");
+                    //var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
+                    var reply = await _client.RegistarApostaAsync(
                         new Aposta
                         {
                             NumeroApostador = NIF,
-                            Numeros = { _numeros[0], _numeros[1], _numeros[2], _numeros[3], _numeros[4] },
-                            Estrelas = { _estrelas[0], _estrelas[1] },
-                            DataAposta = Timestamp.FromDateTime(DateTime.UtcNow)
+                            Numeros = {_numeros},
+                            Estrelas = { _estrelas},
                         });
                     if(reply.Estado)
                     {
