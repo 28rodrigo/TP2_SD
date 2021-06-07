@@ -116,7 +116,7 @@ namespace ClienteUtilizador
                     }      //NIF Inválido 
                     else { MessageBox.Show("Por Favor Introduza um NIF Válido!", "Erro!", MessageBoxButtons.OK); }
                 }
-                catch
+                catch(Exception ee)
                 {
                     //Erro a conectar com o Servidor
                     loopAux++;

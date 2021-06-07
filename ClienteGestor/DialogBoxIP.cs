@@ -47,7 +47,7 @@ namespace ClienteGestor
                 return;
             }
             //definir address de ligação
-            Address = "http://" + AUXIP + ":" + AUXPORT;
+            Address = "https://" + AUXIP + ":" + AUXPORT;
             //Chamar uma nova gestorView -> View Principal deste cliente
             GestorView gestorView = new GestorView(Address);
             gestorView.FormClosed += new FormClosedEventHandler(gestorView_FormClosed);

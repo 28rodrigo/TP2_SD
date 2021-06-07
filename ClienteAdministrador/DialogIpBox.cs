@@ -50,7 +50,7 @@ namespace ClienteAdministrador
                 return;
             }
             //definir address de ligação
-            Address = "http://" + AUXIP + ":" + AUXPORT;
+            Address = "https://" + AUXIP + ":" + AUXPORT;
             //Chamar uma nova adminView -> View Principal deste cliente
             AdminView adminView = new AdminView(Address);
             adminView.FormClosed += new FormClosedEventHandler(adminView_FormClosed);

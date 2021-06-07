@@ -50,7 +50,7 @@ namespace ClienteUtilizador
                 return;
             }
             //definir address de ligação
-            Address = "http://" + AUXIP + ":" + AUXPORT;
+            Address = "https://" + AUXIP + ":" + AUXPORT;
             //Chamar uma nova UserView -> View Principal deste cliente
             UserView userView = new UserView(Address);
             userView.FormClosed += new FormClosedEventHandler(userView_FormClosed);
