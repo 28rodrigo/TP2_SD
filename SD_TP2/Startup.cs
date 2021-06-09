@@ -7,10 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SD_TP2.Database;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 
 namespace SD_TP2
 {
@@ -22,10 +18,8 @@ namespace SD_TP2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
-            services.AddDbContext<ChavesContext>(options => options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=TP2_SD;Trusted_Connection=True;MultipleActiveResultSets=true"));
+            services.AddDbContext<ChavesContext>(options => options.UseSqlServer(Environment.GetEnvironmentVariable("DBCONNECTION")));
         }
-        
-      
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

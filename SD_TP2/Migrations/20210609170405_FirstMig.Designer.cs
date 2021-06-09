@@ -10,8 +10,8 @@ using SD_TP2.Database;
 namespace SD_TP2.Migrations
 {
     [DbContext(typeof(ChavesContext))]
-    [Migration("20210607163536_First")]
-    partial class First
+    [Migration("20210609170405_FirstMig")]
+    partial class FirstMig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace SD_TP2.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TP2_SD.Models.RegistoAposta", b =>
+            modelBuilder.Entity("SD_TP2.Models.RegistoAposta", b =>
                 {
                     b.Property<int>("RegistoApostaId")
                         .ValueGeneratedOnAdd()

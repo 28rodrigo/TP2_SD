@@ -28,49 +28,41 @@ namespace ClienteAdministrador
         /// </summary>
         public async void ListLoader()
         {
-            //em cada chamada ao servidor caso a primeira tentativa falhar são tentadas mais duas vezes
-            var loopAux = 0;
-            var loopSucess = false;
-
-            while(loopAux<3 && !loopSucess)
+            try
             {
-                try
+                //configurar ligação ao servidor
+                var httpHandler = new HttpClientHandler();
+                httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                //criar cliente para acessar ao servidor
+                var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                var client = new ClienteAdministradorP.ClienteAdministradorPClient(channel);
+                //invocar função Consultar implementada no servidor 
+                //reply = resposta do servidor
+                var reply = await client.ConsultarAsync(new Empty());
+                if (reply.Estado)
                 {
-                    //configurar ligação ao servidor
-                    var httpHandler = new HttpClientHandler();
-                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    //criar cliente para acessar ao servidor
-                    var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                    var client = new ClienteAdministradorP.ClienteAdministradorPClient(channel);
-                    //invocar função Consultar implementada no servidor 
-                    //reply = resposta do servidor
-                    var reply = await client.ConsultarAsync(new Empty());
-                    if (reply.Estado)
+                    //Estado -> true -> Operação correu bem
+                    //atualizar ListView's
+                    foreach (var element in reply.Apostas)
                     {
-                        //Estado -> true -> Operação correu bem
-                        //atualizar ListView's
-                        foreach (var element in reply.Utilizadores)
-                            listViewUtilizadores.Items.Add(element.NIF.ToString());
-
-                        foreach (var element in reply.Apostas)
-                            listViewChaves.Items.Add(element.NumeroAposta.ToString()).SubItems.AddRange(new string[] { element.Numeros, element.Estrelas, element.Premio.ToString(), element.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
-                        loopSucess = true;
+                        //teste para, caso premio = 0 => Sem prémio
+                        string premio="";
+                        if (element.Premio == 0) { premio = "Sem Prémio"; }
+                        else { premio = element.Premio.ToString() + "º"; }
+                        listViewChaves.Items.Add(element.NumeroAposta.ToString()).SubItems.AddRange(new string[] { element.NumeroApostador.ToString(), element.Numeros, element.Estrelas, premio, element.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
                     }
-                    else
-                    {
-                        //Estado -> false -> Operação correu mal
-                        MessageBox.Show("Erro de Conexão ao server!", "Estado da Ligação:", MessageBoxButtons.OK);
-                        loopSucess = true;
-                    }                
                 }
-                catch
+                else
                 {
-                    //Erro a conectar com o Servidor
-                    loopAux++;
-                    MessageBox.Show("Erro de Conexão ao server!", "Estado da Ligação:", MessageBoxButtons.OK);
-                }
+                    //Estado -> false -> Operação correu mal
+                    MessageBox.Show("Não há chaves a arquivar!", "Estado:", MessageBoxButtons.OK);
+                }                
             }
-            
+            catch
+            {
+                //Erro a conectar com o Servidor
+                MessageBox.Show("Erro de Conexão ao server!", "Estado da Ligação:", MessageBoxButtons.OK);
+            }   
         }
         /// <summary>
         /// Função disparada quando a View é totalmente carregada

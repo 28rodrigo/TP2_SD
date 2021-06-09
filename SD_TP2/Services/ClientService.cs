@@ -70,10 +70,11 @@ namespace SD_TP2
                 {
                     ApostasNifConverted.Add(new Historico
                     {
+                        NumeroApostador = element.NIF,
                         NumeroAposta = element.RegistoApostaId,
-                        DataAposta = Timestamp.FromDateTime(element.Data.ToUniversalTime()),
                         Estrelas = element.Estrelas,
                         Numeros = element.Numeros,
+                        DataAposta = Timestamp.FromDateTime(element.Data.ToUniversalTime()),
                         Premio = element.Premio
                     });
                 });

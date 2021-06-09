@@ -19,7 +19,7 @@ namespace SD_TP2.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TP2_SD.Models.RegistoAposta", b =>
+            modelBuilder.Entity("SD_TP2.Models.RegistoAposta", b =>
                 {
                     b.Property<int>("RegistoApostaId")
                         .ValueGeneratedOnAdd()

@@ -32,11 +32,12 @@ message PedidoHistorico {
 }
 //Mensagem que contem informação completa de uma Aposta -> Usada na message ResultadoHistorico
 message Historico{
-	int32 NumeroAposta=1;
-	string Numeros =2;//Numero Utilizador + Chave + Numero Sorteio
-	string Estrelas =3;
-	google.protobuf.Timestamp DataAposta=4;
-	int32 Premio=5;
+	int32 NumeroApostador=1;
+	int32 NumeroAposta=2;
+	string Numeros =3;//Numero Utilizador + Chave + Numero Sorteio
+	string Estrelas =4;
+	google.protobuf.Timestamp DataAposta=5;
+	int32 Premio=6;
 }
 //Mensagem de retorno que contem todas as apostas já realizadas por um determinado Apostador e o Estado da operação -> Serviço ClienteUtilizadorP
 message ResultadoHistorico {
@@ -84,14 +85,8 @@ message ArquivoResposta {
 	bool EstadoArquivo = 1;
 }
 
-//Mensagem com a informação de um Utilizador -> Usado na mensagem ConsultarResposta
-message Utilizador{
-	int32 NIF=1;
-}
-
 //Menasgem de retorno que contêm toda informação acerca dos Utilizadores, das apostas ativas e do estado da operação
 message ConsultarResposta {
 	bool Estado = 1;
-	repeated Utilizador Utilizadores=2;
-	repeated Historico Apostas =3;
+	repeated Historico Apostas = 2;
 }

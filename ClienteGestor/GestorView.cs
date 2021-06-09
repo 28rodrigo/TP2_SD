@@ -47,56 +47,46 @@ namespace ClienteGestor
                 _estrelas[1] = Int32.Parse(textBoxEstrela2.Text);
                 Array.Sort(_estrelas);
 
-                //em cada chamada ao servidor caso a primeira tentativa falhar são tentadas mais duas vezes
-                var loopAux = 0;
-                var loopSucess = false;
-                while (loopAux < 3 && !loopSucess)
+                try
                 {
-                    try
-                    {
-                        //configurar ligação ao servidor
-                        var httpHandler = new HttpClientHandler();
-                        httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                        //criar cliente para acessar ao servidor
-                        var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                        var _client = new ClienteGestorSorteioP.ClienteGestorSorteioPClient(channel);
-                        //invocar função GerirSorteio implementada no servidor 
-                        //reply = resposta do servidor
-                        var reply = await _client.GerirSorteioAsync(
-                            //definir parametros de entrada 
-                            new Resultado
-                            {
-                                Numeros = { _numeros[0], _numeros[1], _numeros[2], _numeros[3], _numeros[4] },
-                                Estrelas = { _estrelas[0], _estrelas[1] }
-                            });
-                        if (reply.Estado)
+                    //configurar ligação ao servidor
+                    var httpHandler = new HttpClientHandler();
+                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    //criar cliente para acessar ao servidor
+                    var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                    var _client = new ClienteGestorSorteioP.ClienteGestorSorteioPClient(channel);
+                    //invocar função GerirSorteio implementada no servidor 
+                    //reply = resposta do servidor
+                    var reply = await _client.GerirSorteioAsync(
+                        //definir parametros de entrada 
+                        new Resultado
                         {
-                            //Estado -> true -> Operação correu bem
-                            //atualizar ListView
-                            foreach (var ele in reply.ApostasVencedoras)
-                            {
-                                listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.NIF.ToString(), ele.Numeros, ele.Estrelas, ele.Premio.ToString() + "º", ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
-                            }
-                            
-                            MessageBox.Show("Aposta subemetida com sucesso!", "Estado da Aposta:", MessageBoxButtons.OK);
-                            loopSucess = true;
-                            
+                            Numeros = { _numeros[0], _numeros[1], _numeros[2], _numeros[3], _numeros[4] },
+                            Estrelas = { _estrelas[0], _estrelas[1] }
+                        });
+                    if (reply.Estado)
+                    {
+                        //Estado -> true -> Operação correu bem
+                        //atualizar ListView
+                        foreach (var ele in reply.ApostasVencedoras)
+                        {
+                            listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.NIF.ToString(), ele.Numeros, ele.Estrelas, ele.Premio.ToString() + "º", ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
                         }
-                        else
-                        {
-                            //Estado -> frue -> Operação correu ~mal
-                            loopSucess = true;
-                            MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
-                        } 
+                            
+                        MessageBox.Show("Aposta subemetida com sucesso!", "Estado da Aposta:", MessageBoxButtons.OK);
+                            
                     }
-                    catch
+                    else
                     {
-                        //Erro a conectar com o Servidor
-                        loopAux++;
+                        //Estado -> frue -> Operação correu ~mal
                         MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
-                    }
+                    } 
                 }
-
+                catch
+                {
+                    //Erro a conectar com o Servidor
+                    MessageBox.Show("A aposta não pode ser subemetida por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
+                }
             }
         }
         /// <summary>

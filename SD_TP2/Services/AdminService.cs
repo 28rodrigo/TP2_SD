@@ -74,24 +74,18 @@ namespace SD_TP2
         /// <returns>Retorna o estado(True/False) da operação e tambem a informação de todos os Utilizadores e das apostas ativas para sorteio</returns>
         public override Task<ConsultarResposta> Consultar(Empty request, ServerCallContext context)
         {
-            //Consultar todos as apostas com NIF diferente
-            var ApostasUsers = _dbcontext.Apostas.ToList().GroupBy(elemento => elemento.NIF).Distinct().ToList();
-            if (ApostasUsers.Count != 0 && ApostasUsers != null)
+            //Consultar apostas ativas
+            var Apostas = _dbcontext.Apostas.Where(element => element.Arquivada == false).ToList();
+            if (Apostas.Count != 0 && Apostas != null)
             {
                 //Para retornar a informação ao cliente é necessário fazer a "tradução" da informação: List -> RepeatableField
-                RepeatedField<Utilizador> ApostadoresConvertidos = new RepeatedField<Utilizador>();
                 RepeatedField<Historico> ApostasConvertidas = new RepeatedField<Historico>();
-                ApostasUsers.ForEach((elem) =>
-                {
-                    ApostadoresConvertidos.Add(new Utilizador { NIF = elem.Key });
-                });
 
-                //Consultar apostas ativas
-                var Apostas = _dbcontext.Apostas.Where(element => element.Arquivada == false).ToList();
                 Apostas.ForEach((element) =>
                 {
                     ApostasConvertidas.Add(new Historico
-                    {
+                    { 
+                        NumeroApostador = element.NIF,
                         NumeroAposta = element.RegistoApostaId,
                         Numeros = element.Numeros,
                         Estrelas = element.Estrelas,
@@ -103,7 +97,6 @@ namespace SD_TP2
                 return Task.FromResult(new ConsultarResposta
                 {
                     Estado = true,
-                    Utilizadores = { ApostadoresConvertidos },
                     Apostas = { ApostasConvertidas }
 
                 });
@@ -113,7 +106,6 @@ namespace SD_TP2
                 return Task.FromResult(new ConsultarResposta
                 {
                     Estado = false,
-                    Utilizadores = {  },
                     Apostas = {  }
 
                 });
