@@ -70,7 +70,7 @@ namespace ClienteGestor
                         //atualizar ListView
                         foreach (var ele in reply.ApostasVencedoras)
                         {
-                            listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.NIF.ToString(), ele.Numeros, ele.Estrelas, ele.Premio.ToString() + "º", ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
+                            listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.NIF.ToString(), ele.Numeros, ele.Estrelas, ele.Premio.ToString() + "º", ele.DataAposta.ToDateTime().ToLocalTime().ToString("dd/MM/yyyy HH:mm") });
                         }
                             
                         MessageBox.Show("Aposta subemetida com sucesso!", "Estado da Aposta:", MessageBoxButtons.OK);

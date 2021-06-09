@@ -49,13 +49,17 @@ namespace ClienteAdministrador
                         string premio="";
                         if (element.Premio == 0) { premio = "Sem Prémio"; }
                         else { premio = element.Premio.ToString() + "º"; }
-                        listViewChaves.Items.Add(element.NumeroAposta.ToString()).SubItems.AddRange(new string[] { element.NumeroApostador.ToString(), element.Numeros, element.Estrelas, premio, element.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
+                        listViewChaves.Items.Add(element.NumeroAposta.ToString()).SubItems.AddRange(new string[] { element.NumeroApostador.ToString(), element.Numeros, element.Estrelas, premio, element.DataAposta.ToDateTime().ToLocalTime().ToString("dd/MM/yyyy HH:mm") });
                     }
+                    listViewChaves.Show();
+                    buttonArquivar.Enabled = true;
                 }
                 else
                 {
-                    //Estado -> false -> Operação correu mal
+                    //Estado -> false -> Sem Chaves para arquivar
                     MessageBox.Show("Não há chaves a arquivar!", "Estado:", MessageBoxButtons.OK);
+                    buttonArquivar.Enabled = false;
+                    listViewChaves.Hide();
                 }                
             }
             catch
@@ -68,7 +72,7 @@ namespace ClienteAdministrador
         /// Função disparada quando a View é totalmente carregada
         /// </summary>
         /// <param><c>sender</c>referencia ao objeto que disparou esta função</param>
-        /// <param><c>er</c>referencia ao evento  Load</param>
+        /// <param><c>e</c>referencia ao evento  Load</param>
         private void AdminView_Load(object sender, EventArgs e)
         {
             //executar função ListLoader
@@ -80,7 +84,7 @@ namespace ClienteAdministrador
         /// apostas do sorteio ativo
         /// </summary>
         /// <param><c>sender</c>referencia ao objeto que disparou esta função</param>
-        /// <param><c>er</c>referencia ao evento Click</param>
+        /// <param><c>e</c>referencia ao evento Click</param>
         private async void buttonArquivar_Click(object sender, EventArgs e)
         {
             var loopAux = 0;
@@ -123,6 +127,17 @@ namespace ClienteAdministrador
                     MessageBox.Show("A operação não pode prosseguir por um erro de servidor!", "Estado da Aposta:", MessageBoxButtons.OK);
                 }
             }
+        }
+
+        /// <summary>
+        /// Função disparada quando o botão "Atualizar Tabela" (buttonRefresh) é clicado
+        /// </summary>
+        /// <param><c>sender</c>referencia ao objeto que disparou esta função</param>
+        /// <param><c>e</c>referencia ao evento Click</param>
+        private void buttonRefresh_Click(object sender, EventArgs e)
+        {
+            //executar função ListLoader
+            ListLoader();
         }
     }
 }

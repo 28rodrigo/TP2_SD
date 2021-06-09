@@ -100,7 +100,7 @@ namespace ClienteUtilizador
                             string premio = "";
                             if (ele.Premio == 0) { premio = "Sem Prémio"; }
                             else { premio = ele.Premio.ToString() + "º"; }
-                            listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.Numeros, ele.Estrelas, premio, ele.DataAposta.ToDateTime().ToString("dd/MM/yyyy HH:mm") });
+                            listViewRAnteriores.Items.Add(ele.NumeroAposta.ToString()).SubItems.AddRange(new string[] { ele.Numeros, ele.Estrelas, premio, ele.DataAposta.ToDateTime().ToLocalTime().ToString("dd/MM/yyyy HH:mm") });
                         }
                         MessageBox.Show("Sucesso!", "Estado do Pedido:", MessageBoxButtons.OK);
                     }
