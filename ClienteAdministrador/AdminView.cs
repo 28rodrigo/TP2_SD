@@ -28,6 +28,7 @@ namespace ClienteAdministrador
         /// </summary>
         public async void ListLoader()
         {
+            listViewChaves.Items.Clear();
             try
             {
                 //configurar ligação ao servidor
