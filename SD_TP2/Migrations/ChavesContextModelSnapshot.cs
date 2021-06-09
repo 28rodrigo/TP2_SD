@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TP2_SD.Database;
+using SD_TP2.Database;
 
-namespace TP2_SD.Migrations
+namespace SD_TP2.Migrations
 {
     [DbContext(typeof(ChavesContext))]
-    [Migration("20210601152125_FirstMigration")]
-    partial class FirstMigration
+    partial class ChavesContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,50 +29,24 @@ namespace TP2_SD.Migrations
                     b.Property<bool>("Arquivada")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ChaveId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Estrelas")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("NIF")
                         .HasColumnType("int");
+
+                    b.Property<string>("Numeros")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Premio")
                         .HasColumnType("int");
 
                     b.HasKey("RegistoApostaId");
 
-                    b.HasIndex("ChaveId");
-
                     b.ToTable("Apostas");
-                });
-
-            modelBuilder.Entity("TP2_SD.Models.RegistoChave", b =>
-                {
-                    b.Property<int>("ChaveId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Estrelas")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Numeros")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ChaveId");
-
-                    b.ToTable("Chaves");
-                });
-
-            modelBuilder.Entity("TP2_SD.Models.RegistoAposta", b =>
-                {
-                    b.HasOne("TP2_SD.Models.RegistoChave", "Chave")
-                        .WithMany()
-                        .HasForeignKey("ChaveId");
-
-                    b.Navigation("Chave");
                 });
 #pragma warning restore 612, 618
         }

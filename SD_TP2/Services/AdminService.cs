@@ -3,13 +3,14 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SD_TP2;
+using SD_TP2.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TP2_SD.Database;
 
-namespace TP2_SD
+namespace SD_TP2
 {
     public class AdminService : ClienteAdministradorP.ClienteAdministradorPBase
     {
@@ -31,7 +32,7 @@ namespace TP2_SD
             try
             {
                 //Atualizar os registos com o parametro Arquivado false para true
-                var ApostasAtivas = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).ToList();
+                var ApostasAtivas = _dbcontext.Apostas.Where(element => element.Arquivada == false).ToList();
                 ApostasAtivas.ForEach(ele => {
                     ele.Arquivada = true;
                     _dbcontext.Apostas.Update(ele);
@@ -74,7 +75,7 @@ namespace TP2_SD
         public override Task<ConsultarResposta> Consultar(Empty request, ServerCallContext context)
         {
             //Consultar todos as apostas com NIF diferente
-            var ApostasUsers = _dbcontext.Apostas.Include("Chave").ToList().GroupBy(elemento => elemento.NIF).Distinct().ToList();
+            var ApostasUsers = _dbcontext.Apostas.ToList().GroupBy(elemento => elemento.NIF).Distinct().ToList();
             if (ApostasUsers.Count != 0 && ApostasUsers != null)
             {
                 //Para retornar a informação ao cliente é necessário fazer a "tradução" da informação: List -> RepeatableField
@@ -86,14 +87,14 @@ namespace TP2_SD
                 });
 
                 //Consultar apostas ativas
-                var Apostas = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).ToList();
+                var Apostas = _dbcontext.Apostas.Where(element => element.Arquivada == false).ToList();
                 Apostas.ForEach((element) =>
                 {
                     ApostasConvertidas.Add(new Historico
                     {
                         NumeroAposta = element.RegistoApostaId,
-                        Numeros = element.Chave.Numeros,
-                        Estrelas = element.Chave.Estrelas,
+                        Numeros = element.Numeros,
+                        Estrelas = element.Estrelas,
                         DataAposta = Timestamp.FromDateTime(element.Data.ToUniversalTime()),
                         Premio = element.Premio
                     });

@@ -39,9 +39,8 @@ namespace ClienteAdministrador
                     //configurar ligação ao servidor
                     var httpHandler = new HttpClientHandler();
                     httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
                     //criar cliente para acessar ao servidor
-                    using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                    var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
                     var client = new ClienteAdministradorP.ClienteAdministradorPClient(channel);
                     //invocar função Consultar implementada no servidor 
                     //reply = resposta do servidor
@@ -102,9 +101,8 @@ namespace ClienteAdministrador
                     //configurar ligação ao servidor
                     var httpHandler = new HttpClientHandler();
                     httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
                     //criar cliente para acessar ao servidor
-                    using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                    var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
                     var client = new ClienteAdministradorP.ClienteAdministradorPClient(channel);
                     //invocar função Arquivar implementada no servidor 
                     //reply = resposta do servidor

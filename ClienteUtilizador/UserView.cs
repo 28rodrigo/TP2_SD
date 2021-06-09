@@ -87,10 +87,9 @@ namespace ClienteUtilizador
 
                         //configurar ligação ao servidor
                         var httpHandler = new HttpClientHandler();
-                        httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                        httpHandler.ServerCertificateCustomValidationCallback =HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
                         //criar cliente para acessar ao servidor
-                        using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                        var channel = GrpcChannel.ForAddress(Address,new GrpcChannelOptions { HttpHandler = httpHandler });
                         var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
                         //invocar função HistoricoApostas, implementada no servidor 
                         //reply = resposta do servidor
@@ -162,9 +161,8 @@ namespace ClienteUtilizador
                             //configurar ligação ao servidor
                             var httpHandler = new HttpClientHandler();
                             httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
                             //criar cliente para acessar ao servidor
-                            using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                            var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
                             var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
                             //invocar função RegistarAposta implementada no servidor 
                             //reply = resposta do servidor

@@ -57,9 +57,8 @@ namespace ClienteGestor
                         //configurar ligação ao servidor
                         var httpHandler = new HttpClientHandler();
                         httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
                         //criar cliente para acessar ao servidor
-                        using var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+                        var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
                         var _client = new ClienteGestorSorteioP.ClienteGestorSorteioPClient(channel);
                         //invocar função GerirSorteio implementada no servidor 
                         //reply = resposta do servidor

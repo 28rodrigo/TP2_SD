@@ -1,16 +1,16 @@
 using Google.Protobuf.Collections;
 using Grpc.Core;
-using TP2_SD.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TP2_SD.Database;
 using Google.Protobuf.WellKnownTypes;
+using SD_TP2.Database;
+using SD_TP2.Models;
 
-namespace TP2_SD
+namespace SD_TP2
 {
     public class ClientService : ClienteUtilizadorP.ClienteUtilizadorPBase
     {
@@ -36,11 +36,7 @@ namespace TP2_SD
                 string EstrelasReceived = request.Estrelas[0] + "," + request.Estrelas[1];
                 
                 //Guardar dados na BD e retornar Estado.
-                RegistoChave NovaChave = new RegistoChave { Numeros = NumerosReceived, Estrelas = EstrelasReceived };
-                var dbChavereturn = _dbcontext.Chaves.Add(NovaChave);
-                _dbcontext.SaveChanges();
-                int IdChave = NovaChave.ChaveId;
-                RegistoAposta NovaAposta = new RegistoAposta { NIF = request.NumeroApostador, Data = (request.DataAposta.ToDateTime()), Chave = NovaChave, Arquivada = false, Premio = 0 };
+                RegistoAposta NovaAposta = new RegistoAposta { NIF = request.NumeroApostador, Data = (request.DataAposta.ToDateTime()), Numeros=NumerosReceived,Estrelas=EstrelasReceived, Arquivada = false, Premio = 0 };
                 _dbcontext.Apostas.Add(NovaAposta);
                 _dbcontext.SaveChanges();
                 return Task.FromResult(new EstadoAposta
@@ -65,7 +61,7 @@ namespace TP2_SD
         public override Task<ResultadoHistorico> HistoricoApostas(PedidoHistorico request, ServerCallContext context)
         {
             //Consultar Apostas com determinado NIF
-            var ApostasNif = _dbcontext.Apostas.Include("Chave").Where(element => element.NIF == request.NumeroApostador).ToList();
+            var ApostasNif = _dbcontext.Apostas.Where(element => element.NIF == request.NumeroApostador).ToList();
             if (ApostasNif != null)
             {
                 //Para retornar a informação ao cliente é necessário fazer a "tradução" da informação: List-> RepeatableField
@@ -76,8 +72,8 @@ namespace TP2_SD
                     {
                         NumeroAposta = element.RegistoApostaId,
                         DataAposta = Timestamp.FromDateTime(element.Data.ToUniversalTime()),
-                        Estrelas = element.Chave.Estrelas,
-                        Numeros = element.Chave.Numeros,
+                        Estrelas = element.Estrelas,
+                        Numeros = element.Numeros,
                         Premio = element.Premio
                     });
                 });

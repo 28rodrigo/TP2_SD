@@ -1,18 +1,16 @@
 using Google.Protobuf.Collections;
-using TP2_SD.AuxClasses;
 using Grpc.Core;
-using TP2_SD.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TP2_SD.Database;
 using Google.Protobuf.WellKnownTypes;
+using SD_TP2.Database;
+using SD_TP2.AuxClasses;
 
-
-namespace TP2_SD
+namespace SD_TP2
 {
     public class GestorService : ClienteGestorSorteioP.ClienteGestorSorteioPBase
     {
@@ -33,12 +31,12 @@ namespace TP2_SD
         public override Task<EstadoResultado>GerirSorteio(Resultado request, ServerCallContext context)
         {   
             //Consultar Apostas ativas 
-            var ApostasAtivas = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).ToList();
+            var ApostasAtivas = _dbcontext.Apostas.Where(element => element.Arquivada == false).ToList();
 
             //Calcular Prémios
             ApostasAtivas.ForEach(ele => {
-                var NumerosString=ele.Chave.Numeros;
-                var EstrelasString = ele.Chave.Estrelas;
+                var NumerosString=ele.Numeros;
+                var EstrelasString = ele.Estrelas;
                 int[] _numeros = CalculoPremios.ConvertArrayToInt(NumerosString,',');
                 int[] _estrelas = CalculoPremios.ConvertArrayToInt(EstrelasString,',');
                 int _premio = CalculoPremios.CalcularPremio(_numeros, _estrelas, request.Numeros.ToArray(), request.Estrelas.ToArray());
@@ -48,7 +46,7 @@ namespace TP2_SD
             _dbcontext.SaveChanges();
 
             //Consultar Apostas Vencedoras
-            var ApostasWin = _dbcontext.Apostas.Include("Chave").Where(element => element.Arquivada == false).Where(element => element.Premio != 0).OrderBy(element => element.Premio).ToList();
+            var ApostasWin = _dbcontext.Apostas.Where(element => element.Arquivada == false).Where(element => element.Premio != 0).OrderBy(element => element.Premio).ToList();
 
 
             if (ApostasWin != null)
@@ -62,8 +60,8 @@ namespace TP2_SD
                         NIF = element.NIF,
                         NumeroAposta = element.RegistoApostaId,
                         DataAposta = Timestamp.FromDateTime(element.Data.ToUniversalTime()),
-                        Estrelas = element.Chave.Estrelas,
-                        Numeros = element.Chave.Numeros,
+                        Estrelas = element.Estrelas,
+                        Numeros = element.Numeros,
                         Premio = element.Premio
                     });
                 });

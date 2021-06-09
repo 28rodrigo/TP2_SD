@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-option csharp_namespace = "TP2_SD";
+option csharp_namespace = "SD_TP2";
+
 import "google/protobuf/timestamp.proto"; //importação para usar o timestamp
 import "google/protobuf/empty.proto";
 package greet;
