@@ -16,12 +16,22 @@ namespace ClienteUtilizador
 {
     public partial class UserView : Form
     {
-        //parametro de Entrada - Address de ligação ao servidor
-        private string Address;
+
+        private ClienteUtilizadorP.ClienteUtilizadorPClient _client;
+        /// <summary>
+        /// Construtor da classe UserView
+        /// </summary>
+        /// <param><c>_Adress</c> Endereço Ip do server</param>
         public UserView(string _Address)
         {
             InitializeComponent();
-            Address = _Address;
+            
+            //configurar ligação ao servidor
+            var httpHandler = new HttpClientHandler();
+            httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            //criar cliente para acessar ao servidor
+            var channel = GrpcChannel.ForAddress(_Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+            _client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
         }
 
         /// <summary>
@@ -82,15 +92,9 @@ namespace ClienteUtilizador
                     //limpar listView onde é representado o histórico
                     listViewRAnteriores.Items.Clear();
 
-                    //configurar ligação ao servidor
-                    var httpHandler = new HttpClientHandler();
-                    httpHandler.ServerCertificateCustomValidationCallback =HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    //criar cliente para acessar ao servidor
-                    var channel = GrpcChannel.ForAddress(Address,new GrpcChannelOptions { HttpHandler = httpHandler });
-                    var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
                     //invocar função HistoricoApostas, implementada no servidor 
                     //reply = resposta do servidor
-                    var reply = await client.HistoricoApostasAsync(new PedidoHistorico { NumeroApostador = NIF });
+                    var reply = await _client.HistoricoApostasAsync(new PedidoHistorico { NumeroApostador = NIF });
                     if (reply.Estado)
                     {
                         //Estado -> True -> Operação correu bem
@@ -150,15 +154,9 @@ namespace ClienteUtilizador
                         _estrelas[1] = Int32.Parse(textBoxEstrela2.Text);
                         Array.Sort(_estrelas);
 
-                        //configurar ligação ao servidor
-                        var httpHandler = new HttpClientHandler();
-                        httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                        //criar cliente para acessar ao servidor
-                        var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                        var client = new ClienteUtilizadorP.ClienteUtilizadorPClient(channel);
                         //invocar função RegistarAposta implementada no servidor 
                         //reply = resposta do servidor
-                        var reply = await client.RegistarApostaAsync(
+                        var reply = await _client.RegistarApostaAsync(
                             new Aposta
                             {
                                 NumeroApostador = NIF,

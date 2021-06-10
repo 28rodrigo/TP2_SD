@@ -3,7 +3,7 @@
     "SD_TP2": {
       "commandName": "Project",
       "launchBrowser": false,
-      "applicationUrl": "https://192.168.1.67:4800", //Para utilização local, o recomendado é "https://127.0.0.1:5001" ou o ip da máquina atual
+      "applicationUrl": "https://192.168.1.107:5001", //Para utilização local, o recomendado é "https://127.0.0.1:5001" ou o ip da máquina atual
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DBCONNECTION": "Server=(localdb)\\mssqllocaldb;Database=TP2_SD;Trusted_Connection=True;MultipleActiveResultSets=true"

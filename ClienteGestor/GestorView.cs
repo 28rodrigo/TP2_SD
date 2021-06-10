@@ -15,12 +15,20 @@ namespace ClienteGestor
 {
     public partial class GestorView : Form
     {
-        //parametro de Entrada - Address de ligação ao servidor
-        private string Address;
+        private ClienteGestorSorteioP.ClienteGestorSorteioPClient _client;
+        /// <summary>
+        /// Construtor da classe GestorView
+        /// </summary>
+        /// <param><c>_Adress</c> Endereço Ip do server</param>
         public GestorView(string _Address)
         {
             InitializeComponent();
-            Address = _Address;
+            //configurar ligação ao servidor
+            var httpHandler = new HttpClientHandler();
+            httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            //criar cliente para acessar ao servidor
+            var channel = GrpcChannel.ForAddress(_Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+             _client = new ClienteGestorSorteioP.ClienteGestorSorteioPClient(channel);
         }
 
         /// <summary>
@@ -49,12 +57,7 @@ namespace ClienteGestor
 
                 try
                 {
-                    //configurar ligação ao servidor
-                    var httpHandler = new HttpClientHandler();
-                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    //criar cliente para acessar ao servidor
-                    var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                    var _client = new ClienteGestorSorteioP.ClienteGestorSorteioPClient(channel);
+                    
                     //invocar função GerirSorteio implementada no servidor 
                     //reply = resposta do servidor
                     var reply = await _client.GerirSorteioAsync(

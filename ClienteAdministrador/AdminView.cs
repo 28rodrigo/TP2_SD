@@ -16,12 +16,21 @@ namespace ClienteAdministrador
 {
     public partial class AdminView : Form
     {   
-        //parametro de Entrada - Address de ligação ao servidor
-        private string Address;
+
+        private ClienteAdministradorP.ClienteAdministradorPClient _client;
+        /// <summary>
+        /// Construtor da classe AdminView
+        /// </summary>
+        /// <param><c>_Adress</c> Endereço Ip do server</param>
         public AdminView(string _Address)
         {
             InitializeComponent();
-            Address = _Address;
+            //configurar ligação ao servidor
+            var httpHandler = new HttpClientHandler();
+            httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            //criar cliente para acessar ao servidor
+            var channel = GrpcChannel.ForAddress(_Address, new GrpcChannelOptions { HttpHandler = httpHandler });
+            _client = new ClienteAdministradorP.ClienteAdministradorPClient(channel);
         }
         /// <summary>
         /// Função que é responsável por contactar o servidor para receber toda as apostas ativas e a informação de todos os Utilizadores
@@ -31,15 +40,10 @@ namespace ClienteAdministrador
             listViewChaves.Items.Clear();
             try
             {
-                //configurar ligação ao servidor
-                var httpHandler = new HttpClientHandler();
-                httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                //criar cliente para acessar ao servidor
-                var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                var client = new ClienteAdministradorP.ClienteAdministradorPClient(channel);
+           
                 //invocar função Consultar implementada no servidor 
                 //reply = resposta do servidor
-                var reply = await client.ConsultarAsync(new Empty());
+                var reply = await _client.ConsultarAsync(new Empty());
                 if (reply.Estado)
                 {
                     //Estado -> true -> Operação correu bem
@@ -95,15 +99,10 @@ namespace ClienteAdministrador
             {
                 try
                 {
-                    //configurar ligação ao servidor
-                    var httpHandler = new HttpClientHandler();
-                    httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    //criar cliente para acessar ao servidor
-                    var channel = GrpcChannel.ForAddress(Address, new GrpcChannelOptions { HttpHandler = httpHandler });
-                    var client = new ClienteAdministradorP.ClienteAdministradorPClient(channel);
+                    
                     //invocar função Arquivar implementada no servidor 
                     //reply = resposta do servidor
-                    var reply = await client.ArquivarAsync(new Empty());
+                    var reply = await _client.ArquivarAsync(new Empty());
                     
 
                     if (reply.EstadoArquivo)

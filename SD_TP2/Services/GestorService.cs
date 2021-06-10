@@ -46,7 +46,7 @@ namespace SD_TP2
             _dbcontext.SaveChanges();
 
             //Consultar Apostas Vencedoras
-            var ApostasWin = _dbcontext.Apostas.Where(element => element.Arquivada == false).Where(element => element.Premio != 0).OrderBy(element => element.Premio).ToList();
+            var ApostasWin = ApostasAtivas.Where(ele => ele.Premio != 0).OrderBy(ele => ele.Premio).ToList();
 
 
             if (ApostasWin != null)
